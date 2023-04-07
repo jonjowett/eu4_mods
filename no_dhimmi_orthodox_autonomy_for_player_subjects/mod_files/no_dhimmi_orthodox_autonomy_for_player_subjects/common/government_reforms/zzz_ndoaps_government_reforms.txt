@@ -1,0 +1,110 @@
+zoroastrian_focus_reform = {
+	icon = "articles_of_agreement"
+	allow_normal_conversion = yes
+	potential = {
+		NOT = { has_government_attribute = is_pirate_republic_reform }
+		OR = {
+			is_revolutionary = no
+			NOT = { has_dlc = "Emperor" }
+		}
+		religion = zoroastrian
+		# NDOAPS [[[
+		# Is NOT a non-tributary same-religion direct subject of a player nation
+		# IE: Tributaries of player nations can still take this privilege, but all other subject types can't.
+		NOT = {
+			AND = {
+				is_subject = yes
+				NOT = { is_subject_of_type = tributary_state }
+				overlord = {
+					religion = ROOT
+					ai = no
+				}
+			}
+		}
+		# ]]]
+	}
+	modifiers = {
+		no_religion_penalty = yes
+		global_unrest = -1
+		church_influence_modifier = 0.1
+		church_loyalty_modifier = 0.1
+	}
+	
+	ai = {
+		factor = 1
+	}
+}
+
+
+
+secularization_of_the_state_reform = {
+	icon = "partial_secularisation_reform"
+	allow_normal_conversion = yes
+	potential = {
+		is_revolutionary = yes
+		has_dlc = "Emperor"
+		# NDOAPS [[[
+		# Is NOT a non-tributary same-religion direct subject of a player nation
+		# IE: Tributaries of player nations can still take this privilege, but all other subject types can't.
+		NOT = {
+			AND = {
+				is_subject = yes
+				NOT = { is_subject_of_type = tributary_state }
+				overlord = {
+					religion = ROOT
+					ai = no
+				}
+			}
+		}
+		# ]]]
+	}
+	trigger = {
+		if = {
+			limit = {
+				has_government_attribute = enables_estate_church
+			}
+			can_swap_out_of_estate_granting_reform = {
+				estate = estate_church
+			}
+		}
+	}
+	modifiers = {
+		rr_girondists_influence = 0.1
+		no_religion_penalty = yes
+	}
+	
+	ai = {
+		factor = 1
+	}
+}
+
+the_social_contract_reform = {
+	icon = "the_social_contract"
+	allow_normal_conversion = yes
+	potential = {
+		# NDOAPS [[[
+		# Is NOT a non-tributary same-religion direct subject of a player nation
+		# IE: Tributaries of player nations can still take this privilege, but all other subject types can't.
+		NOT = {
+			AND = {
+				is_subject = yes
+				NOT = { is_subject_of_type = tributary_state }
+				overlord = {
+					religion = ROOT
+					ai = no
+				}
+			}
+		}
+		# ]]]
+	}
+	modifiers = {
+		no_religion_penalty = yes
+		global_unrest = -1
+	}
+	custom_attributes = {
+		enforced_interfaith_dialogue_buff = yes
+	}
+	ai = {
+		factor = 1
+	}
+}

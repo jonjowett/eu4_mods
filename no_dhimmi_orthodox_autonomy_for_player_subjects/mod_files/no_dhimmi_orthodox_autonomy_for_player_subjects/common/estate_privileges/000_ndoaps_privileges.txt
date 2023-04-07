@@ -9,7 +9,7 @@ estate_dhimmi_guaranteed_autonomy = {
 		}
 		NOT = { has_unlocked_estate_privilege = { estate_privilege = estate_dhimmi_guarantee_of_traditions } }
 		# NDOAPS [[[
-		# Is NOT a non-tributary same-religion subject of a player nation
+		# Is NOT a non-tributary same-religion direct subject of a player nation
 		# IE: Tributaries of player nations can still take this privilege, but all other subject types can't.
 		NOT = {
 			AND = {
@@ -118,7 +118,7 @@ estate_dhimmi_guarantee_of_traditions = {
 		NOT = { has_estate_privilege = estate_burghers_enforced_interfaith_dialogue }
 		has_unlocked_estate_privilege = { estate_privilege = estate_dhimmi_guarantee_of_traditions }
 		# NDOAPS [[[
-		# Is NOT a non-tributary same-religion subject of a player nation
+		# Is NOT a non-tributary same-religion direct subject of a player nation
 		# IE: Tributaries of player nations can still take this privilege, but all other subject types can't.
 		NOT = {
 			AND = {
@@ -243,7 +243,7 @@ estate_brahmins_guaranteed_autonomy = {
 			religion_group = dharmic
 		}
 		# NDOAPS [[[
-		# Is NOT a non-tributary same-religion subject of a player nation
+		# Is NOT a non-tributary same-religion direct subject of a player nation
 		# IE: Tributaries of player nations can still take this privilege (because overlords have no religious control over their tributaries), but all other subject types can't.
 		NOT = {
 			AND = {
@@ -342,7 +342,7 @@ estate_burghers_orthodox_tolerance = {
 		}
 		# ]]]
 		# NDOAPS [[[
-		# Is NOT a non-tributary same-religion subject of a player nation
+		# Is NOT a non-tributary same-religion direct subject of a player nation
 		# IE: Tributaries of player nations can still take this privilege, but all other subject types can't.
 		NOT = {
 			AND = {
