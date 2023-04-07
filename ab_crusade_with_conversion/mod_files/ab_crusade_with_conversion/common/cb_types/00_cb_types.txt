@@ -716,53 +716,6 @@ cb_liberation = {
 	war_goal = take_capital_liberation
 }
 
-# AB [[[
-# Copy of cb_crusade (below), with two minor changes (first line of prereqs & wargoal).
-# This new cb MUST be in the SAME file as cb_crusade, otherwise the logic that suppresses cb_crusade when this cb is available doesn't work.
-cb_crusade_with_conversion = {
-	valid_for_subject = no
-	holy_war = yes
-
-	prerequisites = {
-		#mission_completed = zun_wrath
-		can_use_cb_crusade_with_conversion = yes
-		NOT = { has_reform = religious_permanent_revolution_reform }
-		is_neighbor_of = FROM
-		NOT = { religion_group = FROM }
-		NOT = {	has_matching_religion = FROM }
-		OR = {
-			AND = {
-				crusade_target = { tag = FROM }
-				religion = catholic
-			}
-			AND = {
-				FROM = {
-					NOT = {
-						religion_group = muslim 
-					}
-					any_owned_province = {
-						has_province_flag = jihad_target_province_flag
-					}
-				}
-				religion_group = muslim
-				has_global_flag = active_jihad
-				OR = {
-					has_country_flag = jihad_caller
-					any_country = {
-						has_country_flag = jihad_caller
-						religion = ROOT
-					}
-				}
-			}
-			cb_on_religious_enemies = yes
-		}
-		is_revolutionary = no
-	}
-
-	war_goal = superiority_crusade_with_conversion
-}
-# ]]]
-
 # Holy War
 cb_crusade = {
 	valid_for_subject = no
@@ -770,12 +723,7 @@ cb_crusade = {
 
 	prerequisites = {
 		# AB [[[
-		NOT = {
-			has_casus_belli = {
-				type = cb_crusade_with_conversion
-				target = FROM
-			}
-		}
+		can_use_cb_crusade_with_conversion = no
 		# ]]]
 		NOT = { has_reform = religious_permanent_revolution_reform }
 		is_neighbor_of = FROM
@@ -813,6 +761,56 @@ cb_crusade = {
 	war_goal = superiority_crusade
 }
 
+# AB [[[
+# Copy of cb_crusade (above), with two changes (first line of prereqs & wargoal).
+# This new cb MUST be in the SAME file as cb_crusade_pheasants, otherwise the logic that suppresses cb_crusade_pheasants when this cb is available doesn't work.
+cb_crusade_with_conversion = {
+	valid_for_subject = no
+	holy_war = yes
+
+	prerequisites = {
+		# AB [[[
+		can_use_cb_crusade_with_conversion = yes
+		# ]]]
+		NOT = { has_reform = religious_permanent_revolution_reform }
+		is_neighbor_of = FROM
+		NOT = { religion_group = FROM }
+		NOT = {	has_matching_religion = FROM }
+		OR = {
+			AND = {
+				crusade_target = { tag = FROM }
+				religion = catholic
+			}
+			AND = {
+				FROM = {
+					NOT = {
+						religion_group = muslim 
+					}
+					any_owned_province = {
+						has_province_flag = jihad_target_province_flag
+					}
+				}
+				religion_group = muslim
+				has_global_flag = active_jihad
+				OR = {
+					has_country_flag = jihad_caller
+					any_country = {
+						has_country_flag = jihad_caller
+						religion = ROOT
+					}
+				}
+			}
+			cb_on_religious_enemies = yes
+		}
+		is_revolutionary = no
+	}
+	
+	# AB [[[
+	war_goal = superiority_crusade_with_conversion
+	# ]]]
+}
+# ]]]
+
 # Holy War
 cb_crusade_pheasants = {
 	valid_for_subject = no
@@ -822,6 +820,8 @@ cb_crusade_pheasants = {
 
 	prerequisites = {
 		# AB [[[
+		# This CB doesn't require adjacency, so it's only appropriate to suppress it if cb_crusade_with_conversion is available.
+		# If we replaced this logic with the simpler "can_use_cb_crusade_with_conversion = no" (as per cb_crusade) then any nation who could force-convert heathens would be blocked from holy-warring non-adjacent nations with this CB.
 		NOT = {
 			has_casus_belli = {
 				type = cb_crusade_with_conversion

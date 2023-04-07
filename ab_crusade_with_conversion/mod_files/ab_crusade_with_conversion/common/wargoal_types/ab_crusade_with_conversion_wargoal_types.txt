@@ -12,8 +12,12 @@ superiority_crusade_with_conversion = {
 		}
 		
 		peace_options = {
-			po_change_religion
 			po_demand_provinces
+			
+			# We need to use a custom peace offer type, because the hardcoded po_change_religion only permits you to force religion on the primary defender
+			# Putting conversion underneath demand provinces means the AI will normally prefer to take provinces instead of demanding conversion.
+			po_ab_crusade_with_conversion_change_religion
+			
 		}
 		
 		country_desc = ALL_INFIDELS
@@ -35,7 +39,7 @@ superiority_crusade_with_conversion = {
 		
 		country_desc = ALL_INFIDELS
 		prov_desc = ALL_PROVS
-	}	
+	}
 	
 	war_name = CRUSADE_WAR_NAME	
 }
