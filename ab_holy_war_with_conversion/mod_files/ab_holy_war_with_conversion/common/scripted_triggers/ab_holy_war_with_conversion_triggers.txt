@@ -1,0 +1,6 @@
+# Audax Validator EnableCommentMetadata
+
+can_use_cb_crusade_with_conversion = {
+	religion = zunist
+	mission_completed = zun_wrath
+}

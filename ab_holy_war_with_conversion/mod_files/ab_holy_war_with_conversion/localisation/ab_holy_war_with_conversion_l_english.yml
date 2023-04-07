@@ -1,0 +1,6 @@
+﻿l_english:
+ superiority_crusade_with_conversion:0 "Show these infidel dogs superiority"
+ superiority_crusade_with_conversion_desc:0 "War goal is to show them superiority by winning battles."
+ cb_crusade_with_conversion:0 "Holy War"
+ cb_crusade_with_conversion_desc:0 "They are accursed infidels!\n\n§YForced conversion§! is permitted."
+ unlock_holy_war_with_conversion:0 "Allows §Yforced conversion of heathens§! in the peace deal after a §Yholy war§!."

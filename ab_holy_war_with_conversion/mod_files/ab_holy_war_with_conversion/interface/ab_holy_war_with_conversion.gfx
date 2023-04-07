@@ -1,0 +1,9 @@
+spriteTypes = {
+
+	spriteType = {
+		name = "GFX_cb_crusade_with_conversion"
+		texturefile = "gfx/interface/casus_bellis/cb_crusade.dds"
+		effectFile = "gfx/FX/buttonstate.lua"
+	}
+	
+}
