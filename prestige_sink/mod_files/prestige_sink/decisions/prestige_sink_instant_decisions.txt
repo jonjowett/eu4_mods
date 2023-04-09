@@ -1,0 +1,46 @@
+country_decisions = {
+	
+	sacrifice_prestige_for_monarch_points_high_prestige = {
+		potential = {
+			always = yes
+		}
+		allow = {
+			prestige = 90
+		}
+		effect = {
+			add_prestige = -20
+			add_adm_power = 10
+			add_dip_power = 10
+			add_mil_power = 10
+		}
+		ai_will_do = {
+			# AI will only take this decision if it has had the small prestige sink activated for a while
+			factor = 1
+			modifier = {
+				factor = 0
+				NOT = { has_country_modifier = prestige_sink_modifier_small }
+				NOT = { has_country_modifier = prestige_sink_modifier_recently_activated }
+			}
+		}
+	}
+	
+	sacrifice_prestige_for_monarch_points_normal = {
+		# AI is not permitted to use this decision - it can only use the "high prestige" variant
+		potential = {
+			ai = no
+		}
+		allow = {
+			prestige = 20
+		}
+		effect = {
+			add_prestige = -20
+			add_adm_power = 10
+			add_dip_power = 10
+			add_mil_power = 10
+		}
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	
+}

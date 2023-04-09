@@ -1,0 +1,36 @@
+﻿l_english:
+ 
+ #############
+ # Modifiers #
+ #############
+ 
+ prestige_sink_modifier_small: "Prestige Sink (Small)"
+ desc_prestige_sink_modifier_small: "We are sacrificing a small amount of prestige every month to slightly improve our ability to generate monarch points."
+ 
+ prestige_sink_modifier_large: "Prestige Sink (Large)"
+ desc_prestige_sink_modifier_large: "We are sacrificing a large amount of prestige every month to significantly improve our ability to generate monarch points."
+ 
+ prestige_sink_modifier_recently_activated: "Prestige Sink Recently Activated"
+ desc_prestige_sink_modifier_recently_activated: "The prestige sink was recently activated, and cannot be deactivated until this modifier expires. (This modifier only exists to help with AI decision-making. It has no impact on players.)"
+ 
+ prestige_sink_modifier_recently_deactivated: "Prestige Sink Recently Deactivated"
+ desc_prestige_sink_modifier_recently_deactivated: "The prestige sink was recently deactivated, and cannot be reactivated until this modifier expires. (This modifier only exists to help with AI decision-making. It has no impact on players.)"
+ 
+ #############
+ # Decisions #
+ #############
+ 
+ activate_small_prestige_sink_title: "Activate the Small Prestige Sink"
+ activate_small_prestige_sink_desc: "Sacrifice some monthly prestige in exchange for monthly monarch points.\n\n(This decision §Yis§! available for the AI.)"
+ 
+ activate_large_prestige_sink_title: "Activate the Large Prestige Sink"
+ activate_large_prestige_sink_desc: "Sacrifice a lot of monthly prestige in exchange for more monthly monarch points.\n\n(This decision §Yis not§! available for the AI.)"
+ 
+ deactivate_prestige_sink_title: "Deactivate the Prestige Sink"
+ deactivate_prestige_sink_desc: "Stop sacrificing monthly prestige in exchange for monarch points.\n\n(This decision §Yis§! available for the AI.)"
+ 
+ sacrifice_prestige_for_monarch_points_high_prestige_title: "Sacrifice prestige for monarch points (at high prestige)"
+ sacrifice_prestige_for_monarch_points_high_prestige_desc: "Instantly sacrifice a small amount of prestige in exchange for monarch points.\n\n(Players may find it helpful to leave this decision set to alert them when it is valid, so that they are reminded to spend any excess prestige.)\n\n(This decision §Yis§! available for the AI.)"
+ 
+ sacrifice_prestige_for_monarch_points_normal_title: "Sacrifice prestige for monarch points"
+ sacrifice_prestige_for_monarch_points_normal_desc: "Instantly sacrifice a small amount of prestige in exchange for monarch points.\n\n(This decision §Yis not§! available for the AI.)"

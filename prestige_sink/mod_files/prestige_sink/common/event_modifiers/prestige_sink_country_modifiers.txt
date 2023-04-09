@@ -1,0 +1,23 @@
+prestige_sink_modifier_small = {
+	prestige = -18 # 18 per year => 1.5 per month, ie. 50% worse than the usual conversion rate of 1 excess prestige for 1 of each mana
+	country_admin_power      = 1
+	country_diplomatic_power = 1
+	country_military_power   = 1
+	picture = "all_power_cost"
+}
+
+prestige_sink_modifier_large = {
+	prestige = -36 # 36 per year => 3 per month, ie. 50% worse than the usual conversion rate of 1 excess prestige for 1 of each mana
+	country_admin_power      = 2
+	country_diplomatic_power = 2
+	country_military_power   = 2
+	picture = "all_power_cost"
+}
+
+prestige_sink_modifier_recently_activated = {
+	picture = "all_power_cost"
+}
+
+prestige_sink_modifier_recently_deactivated = {
+	picture = "all_power_cost"
+}

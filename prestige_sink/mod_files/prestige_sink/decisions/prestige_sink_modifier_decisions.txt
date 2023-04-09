@@ -1,0 +1,196 @@
+country_decisions = {
+	
+	activate_small_prestige_sink = {
+		
+		potential = {
+			
+			NOT = { has_country_modifier = prestige_sink_modifier_small }
+			
+			# Allow players (but not AI) to switch directly between the small and large prestige sink
+			OR = {
+				ai = no
+				NOT = { has_country_modifier = prestige_sink_modifier_large }
+			}
+			
+			# Allow players (but not AI) to activate and deactivate the sinks instantaneously
+			OR = {
+				ai = no
+				NOT = { has_country_modifier = prestige_sink_modifier_recently_deactivated }
+			}
+			
+		}
+		
+		allow = {
+			prestige = 50
+		}
+		
+		effect = {
+			if = {
+				limit = { has_country_modifier = prestige_sink_modifier_large }
+				remove_country_modifier = prestige_sink_modifier_large
+			}
+			add_country_modifier = { 
+				name = prestige_sink_modifier_small
+				duration = -1
+			}
+			if = {
+				limit = { ai = yes }
+				add_country_modifier = { 
+					name = prestige_sink_modifier_recently_activated
+					duration = 730  # 2 years
+				}
+			}
+		}
+		
+		ai_will_do = {
+			factor = 0.1
+			
+			# AI is exponentially increasingly likely to take the decision as its prestige increases, up to 100% probability at 100 prestige
+			modifier = {
+				factor = 1.5
+				prestige = 60
+			}
+			modifier = {
+				factor = 1.5
+				prestige = 70
+			}
+			modifier = {
+				factor = 1.5
+				prestige = 80
+			}
+			modifier = {
+				factor = 1.5
+				prestige = 90
+			}
+			modifier = {
+				factor = 1.5
+				prestige = 95
+			}
+			modifier = {
+				factor = 1.5
+				prestige = 100
+			}
+			
+			# AI will not take this decision if it has >900 of any monarch point
+			modifier = {
+				factor = 0
+				OR = {
+					adm_power = 900
+					dip_power = 900
+					mil_power = 900
+				}
+			}
+			
+		}
+	}
+	
+	activate_large_prestige_sink = {
+		
+		potential = {
+			
+			NOT = { has_country_modifier = prestige_sink_modifier_large }
+			
+			# Allow players (but not AI) to switch directly between the small and large prestige sink
+			OR = {
+				ai = no
+				NOT = { has_country_modifier = prestige_sink_modifier_small }
+			}
+			
+			# Always disable this decision for AI
+			ai = no
+			
+		}
+		
+		allow = {
+			prestige = 50
+		}
+		
+		effect = {
+			if = {
+				limit = { has_country_modifier = prestige_sink_modifier_small }
+				remove_country_modifier = prestige_sink_modifier_small
+			}
+			add_country_modifier = { 
+				name = prestige_sink_modifier_large
+				duration = -1
+			}
+			if = {
+				limit = { ai = yes }
+				add_country_modifier = { 
+					name = prestige_sink_modifier_recently_activated
+					duration = 730  # 2 years
+				}
+			}
+		}
+		
+		ai_will_do = {
+			factor = 0
+		}
+		
+	}
+	
+	deactivate_prestige_sink = {
+		
+		potential = {
+			OR = {
+				has_country_modifier = prestige_sink_modifier_small
+				has_country_modifier = prestige_sink_modifier_large
+			}
+			OR = {
+				ai = no
+				NOT = { has_country_modifier = prestige_sink_modifier_recently_activated }
+			}
+		}
+		
+		allow = {
+			always = yes
+		}
+		
+		effect = {
+			remove_country_modifier = prestige_sink_modifier_small
+			remove_country_modifier = prestige_sink_modifier_large
+			if = {
+				limit = { ai = yes }
+				add_country_modifier = {
+					name = prestige_sink_modifier_recently_deactivated
+					duration = 730 # 2 years
+				}
+			}
+		}
+		
+		ai_will_do = {
+			
+			factor = 0.1
+			
+			# AI will not deactivate the prestige sink if it has prestige >= 80
+			modifier = {
+				factor = 0
+				prestige = 80
+			}
+			
+			# AI is exponentially more likely to deactivate the prestige sink as its prestige decreases (up to 100% probability at prestige < 40)
+			modifier = {
+				factor = 1.5
+				NOT = { prestige = 80 }
+			}
+			modifier = {
+				factor = 1.5
+				NOT = { prestige = 70 }
+			}
+			modifier = {
+				factor = 2
+				NOT = { prestige = 60 }
+			}
+			modifier = {
+				factor = 2
+				NOT = { prestige = 50 }
+			}
+			modifier = {
+				factor = 2
+				NOT = { prestige = 40 }
+			}
+			
+		}
+		
+	}
+}
