@@ -1,0 +1,26 @@
+country_decisions = {
+	win_court_and_country_via_decision = {
+		major = yes
+		potential = {
+			#Has not already had or resolved C&C
+			NOT = { has_country_flag = had_court_and_country }
+			#Must have some absolutism (ie. check that the mechanic is active)
+			absolutism = 50
+		}
+		allow = {
+			stability = 3
+			absolutism = 70
+			has_any_disaster = no
+			is_at_war = no
+			NOT = { unrest = -3 } # Unrest < -3 , because operators apparently aren't supported in EU4
+		}
+		effect = {
+			add_prestige = 15
+			add_country_modifier = {
+				name = crushed_local_authority
+				duration = -1
+			}
+			set_country_flag = had_court_and_country
+		}
+	}
+}
