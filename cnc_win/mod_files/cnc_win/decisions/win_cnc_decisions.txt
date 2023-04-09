@@ -9,18 +9,31 @@ country_decisions = {
 		}
 		allow = {
 			stability = 3
+			prestige = 50
+			legitimacy_equivalent = 80
 			absolutism = 70
+			NOT = { unrest = -3 } # Unrest < -3
 			has_any_disaster = no
 			is_at_war = no
-			NOT = { unrest = -3 } # Unrest < -3 , because operators apparently aren't supported in EU4
 		}
 		effect = {
-			add_prestige = 15
+			
+			# Prevent C&C disaster from firing
+			custom_tooltip = cnc_win_disaster_will_not_occur
+			hidden_effect = { set_country_flag = had_court_and_country }
+			
+			# Add the modifier from "winning" the disaster
 			add_country_modifier = {
 				name = crushed_local_authority
 				duration = -1
 			}
-			set_country_flag = had_court_and_country
+			
+			# Add "Increased Centralization", so there's some small downside to taking the decision
+			add_country_modifier = { 
+				name = centralization_modifier
+				duration = 3650
+			}
+			
 		}
 	}
 }
