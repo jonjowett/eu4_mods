@@ -1,0 +1,124 @@
+###########
+# Ability #
+###########
+
+pwi_this_province_can_spawn_manufactories = {
+	# Unchanged from vanilla, abstracted into a scripted_trigger so it can be reused wiithout code duplication
+	is_in_capital_area = yes
+	is_island = no
+	is_state = yes
+	development = 20
+	printing_press = 100
+	global_trade = 100
+	custom_trigger_tooltip = {
+		tooltip = two_neighbor_dev_15_provinces
+		calc_true_if = {
+			amount = 2
+			all_neighbor_province = {
+				development = 15
+			}
+		}
+	}
+	OR = {
+		has_building = wharf
+		has_building = weapons
+		has_building = textile
+		has_building = plantations
+		has_building = tradecompany
+		has_building = mills
+	}
+}
+
+
+
+
+
+############
+# Priority #
+############
+
+pwi_this_country_has_extreme_priority_for_spawning_manufactories = {
+	custom_trigger_tooltip = {
+		tooltip = pwi_this_country_has_extreme_priority_for_spawning_manufactories_tt
+		OR = {
+			is_subject = no
+			is_subject_of_type = tributary_state
+		}
+		calc_true_if = {
+			amount = 20
+			all_owned_province = {
+				pwi_this_province_can_spawn_manufactories = yes
+			}
+		}
+	}
+}
+
+pwi_this_country_has_high_priority_for_spawning_manufactories = {
+	custom_trigger_tooltip = {
+		tooltip = pwi_this_country_has_high_priority_for_spawning_manufactories_tt
+		OR = {
+			is_subject = no
+			is_subject_of_type = tributary_state
+		}
+		calc_true_if = {
+			amount = 10
+			all_owned_province = {
+				pwi_this_province_can_spawn_manufactories = yes
+			}
+		}
+	}
+}
+
+
+
+
+
+#############################
+# Other nations' priorities #
+#############################
+
+pwi_no_player_has_extreme_priority_for_spawning_manufactories = {
+	custom_trigger_tooltip = {
+		tooltip = pwi_no_player_has_extreme_priority_for_spawning_manufactories_tt
+		NOT = {
+			any_country = {
+				ai = no
+				pwi_this_country_has_extreme_priority_for_spawning_manufactories = yes
+			}
+		}
+	}
+}
+
+pwi_no_player_has_high_priority_for_spawning_manufactories = {
+	custom_trigger_tooltip = {
+		tooltip = pwi_no_player_has_high_priority_for_spawning_manufactories_tt
+		NOT = {
+			any_country = {
+				ai = no
+				pwi_this_country_has_high_priority_for_spawning_manufactories = yes
+			}
+		}
+	}
+}
+
+pwi_no_country_has_extreme_priority_for_spawning_manufactories = {
+	custom_trigger_tooltip = {
+		tooltip = pwi_no_country_has_extreme_priority_for_spawning_manufactories_tt
+		NOT = {
+			any_country = {
+				pwi_this_country_has_extreme_priority_for_spawning_manufactories = yes
+			}
+		}
+	}
+}
+
+pwi_no_country_has_high_priority_for_spawning_manufactories = {
+	custom_trigger_tooltip = {
+		tooltip = pwi_no_country_has_high_priority_for_spawning_manufactories_tt
+		NOT = {
+			any_country = {
+				pwi_this_country_has_high_priority_for_spawning_manufactories = yes
+			}
+		}
+	}
+}

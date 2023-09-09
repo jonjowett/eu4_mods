@@ -1,0 +1,14 @@
+﻿l_english:
+ 
+ #################
+ # Manufactories #
+ #################
+ 
+ this_country_has_extreme_priority_for_spawning_manufactories_tt: "Has §Yextreme§! priority to spawn the §YManufactories§! institution (ie. §Y20§! qualifying provinces)"
+ this_country_has_high_priority_for_spawning_manufactories_tt: "Has §Yhigh§! priority to spawn the §YManufactories§! institution (ie. §Y10§! qualifying provinces)"
+ 
+ pwi_no_player_has_extreme_priority_for_spawning_manufactories_tt: "No player has §Yextreme§! priority to spawn the §YManufactories§! institution"
+ pwi_no_player_has_high_priority_for_spawning_manufactories_tt: "No player has §Yhigh§! priority to spawn the §YManufactories§! institution"
+ 
+ pwi_no_country_has_extreme_priority_for_spawning_manufactories_tt: "No country has §Yextreme§! priority to spawn the §YManufactories§! institution"
+ pwi_no_country_has_high_priority_for_spawning_manufactories_tt: "No country has §Yhigh§! priority to spawn the §YManufactories§! institution"
