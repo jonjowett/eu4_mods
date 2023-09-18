@@ -15,6 +15,32 @@ country_decisions = {
 			NOT = { unrest = -3 } # Unrest < -3
 			has_any_disaster = no
 			is_at_war = no
+			
+			if = {
+				limit = { absolutism = 90 }
+				manpower_percentage = 0.1
+				years_of_income = 0.5
+			}
+			else_if = {
+				limit = { absolutism = 85 }
+				manpower_percentage = 0.2
+				years_of_income = 1.0
+			}
+			else_if = {
+				limit = { absolutism = 80 }
+				manpower_percentage = 0.3
+				years_of_income = 2.0
+			}
+			else_if = {
+				limit = { absolutism = 75 }
+				manpower_percentage = 0.4
+				years_of_income = 3.0
+			}
+			else = {
+				manpower_percentage = 0.5
+				years_of_income = 5.0
+			}
+			
 		}
 		effect = {
 			
@@ -28,10 +54,38 @@ country_decisions = {
 				duration = -1
 			}
 			
-			# Add "Increased Centralization", so there's some small downside to taking the decision
-			add_country_modifier = { 
-				name = centralization_modifier
-				duration = 3650
+			if = {
+				limit = { absolutism = 90 }
+				custom_tooltip = cnc_win_info_these_penalties_are_for_absolutism_90
+				add_yearly_manpower = -0.5
+				add_years_of_income = -0.5
+			}
+			else_if = {
+				limit = { absolutism = 85 }
+				custom_tooltip = cnc_win_info_these_penalties_are_for_absolutism_85
+				add_stability = -1
+				add_yearly_manpower = -1.0
+				add_years_of_income = -1.0
+			}
+			else_if = {
+				limit = { absolutism = 80 }
+				custom_tooltip = cnc_win_info_these_penalties_are_for_absolutism_80
+				add_stability = -2
+				add_yearly_manpower = -2.0
+				add_years_of_income = -2.0
+			}
+			else_if = {
+				limit = { absolutism = 75 }
+				custom_tooltip = cnc_win_info_these_penalties_are_for_absolutism_75
+				add_stability = -3
+				add_yearly_manpower = -3.0
+				add_years_of_income = -3.0
+			}
+			else = {
+				custom_tooltip = cnc_win_info_these_penalties_are_for_absolutism_70
+				add_stability = -4
+				add_yearly_manpower = -5.0
+				add_years_of_income = -5.0
 			}
 			
 		}
