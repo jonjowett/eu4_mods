@@ -1,0 +1,17 @@
+country_decisions = {
+	personal_fixes_ab_force_enable_gyeongbok_palace = {
+		major = yes
+		potential = {
+			ai = no
+			NOT = { has_country_flag = enable_korean_palace_flag }
+			religion = confucianism
+			owns = 735
+		}
+		allow = {
+			always = yes
+		}
+		effect = {
+			hidden_effect = { set_country_flag = enable_korean_palace_flag }
+		}
+	}
+}

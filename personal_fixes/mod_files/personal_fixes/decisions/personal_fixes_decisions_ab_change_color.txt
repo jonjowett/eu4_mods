@@ -1,0 +1,17 @@
+country_decisions = {
+	personal_fixes_ab_china_imperial_color_choose_again = {
+		major = yes
+		potential = {
+			ai = no
+			is_emperor_of_china = yes
+			mission_completed = china_throne
+			has_country_flag = china_picked_color
+		}
+		allow = {
+			always = yes 
+		}
+		effect = {
+			clr_country_flag = china_picked_color
+		}
+	}
+}
