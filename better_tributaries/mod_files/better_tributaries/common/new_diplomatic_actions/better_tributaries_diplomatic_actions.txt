@@ -1,0 +1,1181 @@
+establish_tributary_better = {
+	category = influence
+
+	require_acceptance = yes
+
+	is_visible = {
+		
+		# Vanilla requirements to create tributaries, from the wiki
+		ROOT = { is_subject = no }
+		OR = {
+			religion_group = eastern
+			technology_group = chinese
+			technology_group = polynesian_tech
+			is_nomad = yes
+			has_reform = feudal_tribe
+			has_reform = celestial_empire
+			has_estate_privilege = estate_nobles_grant_power_to_the_bashorun
+		}
+		
+		# Mod added - can ask tributaries of other nations to become your tributary instead
+		OR = {
+			FROM = { is_subject = no }
+			AND = {
+				FROM = { is_subject_of_type = tributary_state }
+				FROM = { NOT = { is_subject_of = ROOT } }
+			}
+		}
+		
+	}
+	is_allowed = {
+		always = yes
+	}
+	on_accept = {
+		if = {
+			limit = { FROM = { is_subject = yes } }
+			FROM = {
+				overlord = {
+					add_opinion = {
+						who = ROOT
+						modifier = vassal_broke_free
+					}
+				}
+			}
+		}
+		create_subject = {
+			subject_type = tributary_state
+			subject = FROM
+		}
+	}
+	on_decline = {
+	}
+
+	ai_will_do = { # this is a trigger
+		always = no	# Disable for AI for now
+	}
+
+	ai_acceptance = {
+		
+		# Replicate vanilla decision-making logic
+		
+		# Attitude
+		add_entry = {
+			name = bt_recipient_hostile_attitude_towards_overlord
+			limit = {
+				FROM = {
+					OR = {
+						ai_attitude = { who = ROOT attitude = attitude_rivalry }
+						ai_attitude = { who = ROOT attitude = attitude_hostile }
+						ai_attitude = { who = ROOT attitude = attitude_outraged }
+					}
+				}
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -1000
+			}
+		}
+		add_entry = {
+			name = bt_recipient_threatened_attitude_towards_overlord
+			limit = {
+				FROM = { ai_attitude = { who = ROOT attitude = attitude_threatened } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = 100
+			}
+		}
+		
+		# Opinion: +1/-1 per +4/-4 opinion
+		add_entry = {
+			name = DIPLO_OPPINION
+			export_to_variable = {
+				variable_name = ai_value
+				value = opinion
+				who = FROM
+				with = ROOT
+			}
+			multiply_variable = {
+				which = ai_value 
+				value = 0.25
+			}
+		}
+		
+		# Diprep: +2/-2 per +1/-1 diprep
+		add_entry = {
+			name = AI_DIPLOMATIC_REPUTATION
+			export_to_variable = {
+				variable_name = ai_value
+				value = trigger_value:diplomatic_reputation
+				who = ROOT
+			}
+			multiply_variable = {
+				which = ai_value
+				value = 2
+			}
+		}
+		
+		# AI nation's gov rank: -20/-100 Kingdom/Empire
+		add_entry = {
+			name = bt_recipient_rank
+			limit = {
+				FROM = { government_rank = 2 }
+				NOT = { FROM = { government_rank = 3 } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -20
+			}
+		}
+		add_entry = {
+			name = bt_recipient_rank
+			limit = {
+				FROM = { government_rank = 3 }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -100
+			}
+		}
+		
+		# AI nation's Development: -0.5 per dev
+		add_entry = {
+			name = bt_recipient_development
+			export_to_variable = {
+				variable_name = ai_value
+				value = trigger_value:total_development
+				who = FROM
+			}
+			multiply_variable = {
+				which = ai_value
+				value = -0.5
+			}
+		}
+		
+		# AI nation has subject of its own: -1000
+		add_entry = {
+			name = bt_recipient_has_own_subjects
+			limit = { FROM = { any_subject_country = { always = yes } } }
+			export_to_variable = {
+				variable_name = ai_value
+				value = -1000
+			}
+		}
+		
+		# Economic & military comparisons are complex - see below
+		
+		# Vanilla neighbour condition removed and reworked - see below
+		
+		# Vanilla distance between borders removed - use the new adjacency condition instead
+		
+		# Proposer is Celestial Empire or has horde government with rank Empire: +10
+		add_entry = {
+			name = bt_powerful_empire
+			limit = {
+				OR = {
+					ROOT = { has_reform = celestial_empire }
+					AND = {
+						is_nomad = yes
+						government_rank = 3
+					}
+				}
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = 10
+			}
+		}
+		
+		
+		
+		##########################################
+		# Complex criterion: Economic comparison #
+		##########################################
+		
+		# Proposer economic base compared to target nation: +90 to -90
+		# Assumed to be ratio of development
+		
+		# Sender's development > 10*recipient's development: +90
+		add_entry = {
+			name = bt_economic_power_new_overlord
+			limit = {
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						which = bt_sender_total_development
+						value = trigger_value:total_development
+						who = ROOT
+					}
+					export_to_variable = {
+						which = bt_recipient_total_development
+						value = trigger_value:total_development
+						who = FROM
+					}
+					multiply_variable = {
+						which = bt_recipient_total_development
+						value = 10
+					}
+					check_variable = {
+						which = bt_sender_total_development
+						which = bt_recipient_total_development
+					}
+				}
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = 90
+			}
+		}
+		
+		# Recipient's development > 10 * Sender's development: -90
+		add_entry = {
+			name = bt_economic_power_new_overlord
+			limit = {
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						which = bt_sender_total_development
+						value = trigger_value:total_development
+						who = ROOT
+					}
+					export_to_variable = {
+						which = bt_recipient_total_development
+						value = trigger_value:total_development
+						who = FROM
+					}
+					multiply_variable = {
+						which = bt_sender_total_development
+						value = 10
+					}
+					check_variable = {
+						which = bt_recipient_total_development
+						which = bt_sender_total_development
+					}
+				}
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -90
+			}
+		}
+		
+		# Sender's development >= recipient's development: 10 * ((sender_dev/recipient_dev) - 1)
+		add_entry = {
+			name = bt_economic_power_new_overlord
+			limit = {
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						which = bt_sender_total_development
+						value = trigger_value:total_development
+						who = ROOT
+					}
+					export_to_variable = {
+						which = bt_recipient_total_development
+						value = trigger_value:total_development
+						who = FROM
+					}
+					check_variable = {
+						which = bt_sender_total_development
+						which = bt_recipient_total_development
+					}
+				}
+				NOT = {
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							which = bt_sender_total_development
+							value = trigger_value:total_development
+							who = ROOT
+						}
+						export_to_variable = {
+							which = bt_recipient_total_development
+							value = trigger_value:total_development
+							who = FROM
+						}
+						multiply_variable = {
+							which = bt_recipient_total_development
+							value = 10
+						}
+						check_variable = {
+							which = bt_sender_total_development
+							which = bt_recipient_total_development
+						}
+					}
+				}
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = trigger_value:total_development
+				who = ROOT
+			}
+			export_to_variable = {
+				variable_name = bt_recipient_development_value
+				value = trigger_value:total_development
+				who = FROM
+			}
+			divide_variable = {
+				which = ai_value
+				which = bt_recipient_development_value
+			}
+			subtract_variable = {
+				which = ai_value
+				value = 1
+			}
+			multiply_variable = {
+				which = ai_value
+				value = 10
+			}
+		}
+		
+		# Recipient's development >= Senders's development: -10 * ((recipient_dev/sender_dev) - 1)
+		add_entry = {
+			name = bt_economic_power_new_overlord
+			limit = {
+				NOT = {
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							which = bt_sender_total_development
+							value = trigger_value:total_development
+							who = ROOT
+						}
+						export_to_variable = {
+							which = bt_recipient_total_development
+							value = trigger_value:total_development
+							who = FROM
+						}
+						check_variable = {
+							which = bt_sender_total_development
+							which = bt_recipient_total_development
+						}
+					}
+				}
+				NOT = {
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							which = bt_sender_total_development
+							value = trigger_value:total_development
+							who = ROOT
+						}
+						export_to_variable = {
+							which = bt_recipient_total_development
+							value = trigger_value:total_development
+							who = FROM
+						}
+						multiply_variable = {
+							which = bt_sender_total_development
+							value = 10
+						}
+						check_variable = {
+							which = bt_recipient_total_development
+							which = bt_sender_total_development
+						}
+					}
+				}
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = trigger_value:total_development
+				who = FROM
+			}
+			export_to_variable = {
+				variable_name = bt_sender_development_value
+				value = trigger_value:total_development
+				who = ROOT
+			}
+			divide_variable = {
+				which = ai_value
+				which = bt_sender_development_value
+			}
+			subtract_variable = {
+				which = ai_value
+				value = 1
+			}
+			multiply_variable = {
+				which = ai_value
+				value = -10
+			}
+		}
+		
+		
+		
+		##########################################
+		# Complex criterion: Military comparison #
+		##########################################
+		
+		# Proposer military power compared to target nation: +90 to -90
+		# Assumed to be based on the (rather opaque) military_strength trigger
+		
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = { military_strength = { who = FROM value = 10 } }
+			export_to_variable = {
+				variable_name = ai_value
+				value = 90
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = {
+				NOT = { military_strength = { who = FROM value = 10 } }
+				military_strength = { who = FROM value = 9.5 }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = 85
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = {
+				NOT = { military_strength = { who = FROM value = 9.5 } }
+				military_strength = { who = FROM value = 9 }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = 80
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = {
+				NOT = { military_strength = { who = FROM value = 9 } }
+				military_strength = { who = FROM value = 8.5 }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = 75
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = {
+				NOT = { military_strength = { who = FROM value = 8.5 } }
+				military_strength = { who = FROM value = 8 }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = 70
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = {
+				NOT = { military_strength = { who = FROM value = 8 } }
+				military_strength = { who = FROM value = 7.5 }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = 65
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = {
+				NOT = { military_strength = { who = FROM value = 7.5 } }
+				military_strength = { who = FROM value = 7 }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = 60
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = {
+				NOT = { military_strength = { who = FROM value = 7 } }
+				military_strength = { who = FROM value = 6.5 }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = 55
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = {
+				NOT = { military_strength = { who = FROM value = 6.5 } }
+				military_strength = { who = FROM value = 6 }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = 50
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = {
+				NOT = { military_strength = { who = FROM value = 6 } }
+				military_strength = { who = FROM value = 5.5 }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = 45
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = {
+				NOT = { military_strength = { who = FROM value = 5.5 } }
+				military_strength = { who = FROM value = 5 }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = 40
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = {
+				NOT = { military_strength = { who = FROM value = 5 } }
+				military_strength = { who = FROM value = 4.5 }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = 35
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = {
+				NOT = { military_strength = { who = FROM value = 4.5 } }
+				military_strength = { who = FROM value = 4 }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = 30
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = {
+				NOT = { military_strength = { who = FROM value = 4 } }
+				military_strength = { who = FROM value = 3.5 }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = 25
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = {
+				NOT = { military_strength = { who = FROM value = 3.5 } }
+				military_strength = { who = FROM value = 3 }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = 20
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = {
+				NOT = { military_strength = { who = FROM value = 3 } }
+				military_strength = { who = FROM value = 2.5 }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = 15
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = {
+				NOT = { military_strength = { who = FROM value = 2.5 } }
+				military_strength = { who = FROM value = 2 }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = 10
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = {
+				NOT = { military_strength = { who = FROM value = 2 } }
+				military_strength = { who = FROM value = 1.5 }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = 5
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = {
+				NOT = { military_strength = { who = FROM value = 1.5 } }
+				military_strength = { who = FROM value = 1 }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = 0
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = { FROM = { military_strength = { who = ROOT value = 10 } } }
+			export_to_variable = {
+				variable_name = ai_value
+				value = -90
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = {
+				NOT = { FROM = { military_strength = { who = ROOT value = 10 } } }
+				FROM = { military_strength = { who = ROOT value = 9.5 } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -85
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = {
+				NOT = { FROM = { military_strength = { who = ROOT value = 9.5 } } }
+				FROM = { military_strength = { who = ROOT value = 9 } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -80
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = {
+				NOT = { FROM = { military_strength = { who = ROOT value = 9 } } }
+				FROM = { military_strength = { who = ROOT value = 8.5 } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -75
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = {
+				NOT = { FROM = { military_strength = { who = ROOT value = 8.5 } } }
+				FROM = { military_strength = { who = ROOT value = 8 } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -70
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = {
+				NOT = { FROM = { military_strength = { who = ROOT value = 8 } } }
+				FROM = { military_strength = { who = ROOT value = 7.5 } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -65
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = {
+				NOT = { FROM = { military_strength = { who = ROOT value = 7.5 } } }
+				FROM = { military_strength = { who = ROOT value = 7 } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -60
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = {
+				NOT = { FROM = { military_strength = { who = ROOT value = 7 } } }
+				FROM = { military_strength = { who = ROOT value = 6.5 } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -55
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = {
+				NOT = { FROM = { military_strength = { who = ROOT value = 6.5 } } }
+				FROM = { military_strength = { who = ROOT value = 6 } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -50
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = {
+				NOT = { FROM = { military_strength = { who = ROOT value = 6 } } }
+				FROM = { military_strength = { who = ROOT value = 5.5 } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -45
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = {
+				NOT = { FROM = { military_strength = { who = ROOT value = 5.5 } } }
+				FROM = { military_strength = { who = ROOT value = 5 } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -40
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = {
+				NOT = { FROM = { military_strength = { who = ROOT value = 5 } } }
+				FROM = { military_strength = { who = ROOT value = 4.5 } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -35
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = {
+				NOT = { FROM = { military_strength = { who = ROOT value = 4.5 } } }
+				FROM = { military_strength = { who = ROOT value = 4 } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -30
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = {
+				NOT = { FROM = { military_strength = { who = ROOT value = 4 } } }
+				FROM = { military_strength = { who = ROOT value = 3.5 } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -25
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = {
+				NOT = { FROM = { military_strength = { who = ROOT value = 3.5 } } }
+				FROM = { military_strength = { who = ROOT value = 3 } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -20
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = {
+				NOT = { FROM = { military_strength = { who = ROOT value = 3 } } }
+				FROM = { military_strength = { who = ROOT value = 2.5 } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -15
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = {
+				NOT = { FROM = { military_strength = { who = ROOT value = 2.5 } } }
+				FROM = { military_strength = { who = ROOT value = 2 } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -10
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_new_overlord
+			limit = {
+				NOT = { FROM = { military_strength = { who = ROOT value = 2 } } }
+				FROM = { military_strength = { who = ROOT value = 1.5 } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -5
+			}
+		}
+		
+		
+		
+		##################################################################################
+		# New condition: Negative impact from mil strength of current tributary overlord #
+		##################################################################################
+		
+		# Similar logic to the base mil strength test above, but the impact of having a strong overlord is doubled and there is no impact from having a weak overlord.
+		# (Because it should be difficult to steal other peoples' tributaries.)
+		
+		add_entry = {
+			name = bt_military_strength_current_overlord
+			limit = {
+				FROM = { is_subject_of_type = tributary_state }
+				FROM = { overlord = { military_strength = { who = FROM value = 10 } } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -180
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_current_overlord
+			limit = {
+				FROM = { is_subject_of_type = tributary_state }
+				NOT = { FROM = { overlord = { military_strength = { who = FROM value = 10 } } } }
+				FROM = { overlord = { military_strength = { who = FROM value = 9.5 } } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -170
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_current_overlord
+			limit = {
+				FROM = { is_subject_of_type = tributary_state }
+				NOT = { FROM = { overlord = { military_strength = { who = FROM value = 9.5 } } } }
+				FROM = { overlord = { military_strength = { who = FROM value = 9 } } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -160
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_current_overlord
+			limit = {
+				FROM = { is_subject_of_type = tributary_state }
+				NOT = { FROM = { overlord = { military_strength = { who = FROM value = 9 } } } }
+				FROM = { overlord = { military_strength = { who = FROM value = 8.5 } } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -150
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_current_overlord
+			limit = {
+				FROM = { is_subject_of_type = tributary_state }
+				NOT = { FROM = { overlord = { military_strength = { who = FROM value = 8.5 } } } }
+				FROM = { overlord = { military_strength = { who = FROM value = 8 } } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -140
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_current_overlord
+			limit = {
+				FROM = { is_subject_of_type = tributary_state }
+				NOT = { FROM = { overlord = { military_strength = { who = FROM value = 8 } } } }
+				FROM = { overlord = { military_strength = { who = FROM value = 7.5 } } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -130
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_current_overlord
+			limit = {
+				FROM = { is_subject_of_type = tributary_state }
+				NOT = { FROM = { overlord = { military_strength = { who = FROM value = 7.5 } } } }
+				FROM = { overlord = { military_strength = { who = FROM value = 7 } } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -120
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_current_overlord
+			limit = {
+				FROM = { is_subject_of_type = tributary_state }
+				NOT = { FROM = { overlord = { military_strength = { who = FROM value = 7 } } } }
+				FROM = { overlord = { military_strength = { who = FROM value = 6.5 } } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -110
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_current_overlord
+			limit = {
+				FROM = { is_subject_of_type = tributary_state }
+				NOT = { FROM = { overlord = { military_strength = { who = FROM value = 6.5 } } } }
+				FROM = { overlord = { military_strength = { who = FROM value = 6 } } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -100
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_current_overlord
+			limit = {
+				FROM = { is_subject_of_type = tributary_state }
+				NOT = { FROM = { overlord = { military_strength = { who = FROM value = 6 } } } }
+				FROM = { overlord = { military_strength = { who = FROM value = 5.5 } } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -90
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_current_overlord
+			limit = {
+				FROM = { is_subject_of_type = tributary_state }
+				NOT = { FROM = { overlord = { military_strength = { who = FROM value = 5.5 } } } }
+				FROM = { overlord = { military_strength = { who = FROM value = 5 } } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -80
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_current_overlord
+			limit = {
+				FROM = { is_subject_of_type = tributary_state }
+				NOT = { FROM = { overlord = { military_strength = { who = FROM value = 5 } } } }
+				FROM = { overlord = { military_strength = { who = FROM value = 4.5 } } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -70
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_current_overlord
+			limit = {
+				FROM = { is_subject_of_type = tributary_state }
+				NOT = { FROM = { overlord = { military_strength = { who = FROM value = 4.5 } } } }
+				FROM = { overlord = { military_strength = { who = FROM value = 4 } } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -60
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_current_overlord
+			limit = {
+				FROM = { is_subject_of_type = tributary_state }
+				NOT = { FROM = { overlord = { military_strength = { who = FROM value = 4 } } } }
+				FROM = { overlord = { military_strength = { who = FROM value = 3.5 } } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -50
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_current_overlord
+			limit = {
+				FROM = { is_subject_of_type = tributary_state }
+				NOT = { FROM = { overlord = { military_strength = { who = FROM value = 3.5 } } } }
+				FROM = { overlord = { military_strength = { who = FROM value = 3 } } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -40
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_current_overlord
+			limit = {
+				FROM = { is_subject_of_type = tributary_state }
+				NOT = { FROM = { overlord = { military_strength = { who = FROM value = 3 } } } }
+				FROM = { overlord = { military_strength = { who = FROM value = 2.5 } } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -30
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_current_overlord
+			limit = {
+				FROM = { is_subject_of_type = tributary_state }
+				NOT = { FROM = { overlord = { military_strength = { who = FROM value = 2.5 } } } }
+				FROM = { overlord = { military_strength = { who = FROM value = 2 } } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -20
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_current_overlord
+			limit = {
+				FROM = { is_subject_of_type = tributary_state }
+				NOT = { FROM = { overlord = { military_strength = { who = FROM value = 2 } } } }
+				FROM = { overlord = { military_strength = { who = FROM value = 1.5 } } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -10
+			}
+		}
+		add_entry = {
+			name = bt_military_strength_current_overlord
+			limit = {
+				FROM = { is_subject_of_type = tributary_state }
+				NOT = { FROM = { overlord = { military_strength = { who = FROM value = 1.5 } } } }
+				FROM = { overlord = { military_strength = { who = FROM value = 1 } } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = 0
+			}
+		}
+		
+		
+		
+		
+		
+		############################
+		# New condition: Adjacency #
+		############################
+		
+		# Neighbour requirement is based on minimum number of provinces between recipient and sender (or sender's subject) (includes sea provinces)
+		#  ---   0 provinces : 0
+		#  ---   1 province  : -20
+		#  ---   2 provinces : -50
+		#  ---   3 provinces : -100
+		#  --- >=4 provinces : -1000
+		
+		add_entry = {
+			name = bt_recipient_adjacency_to_new_overlord_adjacent
+			limit = { from_is_adjacent_to_root_or_roots_subjects = yes }
+			export_to_variable = { variable_name = ai_value value = 0 }
+		}
+		add_entry = {
+			name = bt_recipient_adjacency_to_new_overlord_one_province
+			limit = { from_is_separated_from_root_or_roots_subjects_by_one_province = yes }
+			export_to_variable = { variable_name = ai_value value = -20 }
+		}
+		add_entry = {
+			name = bt_recipient_adjacency_to_new_overlord_two_provinces
+			limit = { from_is_separated_from_root_or_roots_subjects_by_two_provinces = yes }
+			export_to_variable = { variable_name = ai_value value = -50 }
+		}
+		add_entry = {
+			name = bt_recipient_adjacency_to_new_overlord_three_provinces
+			limit = { from_is_separated_from_root_or_roots_subjects_by_three_provinces = yes }
+			export_to_variable = { variable_name = ai_value value = -100 }
+		}
+		add_entry = {
+			name = bt_recipient_adjacency_to_new_overlord_more_than_three_provinces
+			limit = { from_is_separated_from_root_or_roots_subjects_by_more_than_three_provinces = yes }
+			export_to_variable = { variable_name = ai_value value = -1000 }
+		}
+		
+		
+		
+		###########################################
+		# New condition: Distance between borders #
+		###########################################
+		
+		# If a tributary is too far away, the overlord won't be able to protect it properly.
+		
+		add_entry = {
+			name = bt_recipients_distance_to_new_overlords_capital
+			limit = {
+				NOT = { capital_distance = { who = FROM distance = 100 } }
+			}
+			export_to_variable = { variable_name = ai_value value = 0 }
+		}
+		add_entry = {
+			name = bt_recipients_distance_to_new_overlords_capital
+			limit = {
+				capital_distance = { who = FROM distance = 100 }
+				NOT = { capital_distance = { who = FROM distance = 200 } }
+			}
+			export_to_variable = { variable_name = ai_value value = -10 }
+		}
+		add_entry = {
+			name = bt_recipients_distance_to_new_overlords_capital
+			limit = {
+				capital_distance = { who = FROM distance = 200 }
+				NOT = { capital_distance = { who = FROM distance = 300 } }
+			}
+			export_to_variable = { variable_name = ai_value value = -20 }
+		}
+		add_entry = {
+			name = bt_recipients_distance_to_new_overlords_capital
+			limit = {
+				capital_distance = { who = FROM distance = 300 }
+				NOT = { capital_distance = { who = FROM distance = 400 } }
+			}
+			export_to_variable = { variable_name = ai_value value = -30 }
+		}
+		add_entry = {
+			name = bt_recipients_distance_to_new_overlords_capital
+			limit = {
+				capital_distance = { who = FROM distance = 400 }
+				NOT = { capital_distance = { who = FROM distance = 500 } }
+			}
+			export_to_variable = { variable_name = ai_value value = -40 }
+		}
+		add_entry = {
+			name = bt_recipients_distance_to_new_overlords_capital
+			limit = {
+				capital_distance = { who = FROM distance = 500 }
+				NOT = { capital_distance = { who = FROM distance = 600 } }
+			}
+			export_to_variable = { variable_name = ai_value value = -60 }
+		}
+		add_entry = {
+			name = bt_recipients_distance_to_new_overlords_capital
+			limit = {
+				capital_distance = { who = FROM distance = 600 }
+				NOT = { capital_distance = { who = FROM distance = 700 } }
+			}
+			export_to_variable = { variable_name = ai_value value = -80 }
+		}
+		add_entry = {
+			name = bt_recipients_distance_to_new_overlords_capital
+			limit = {
+				capital_distance = { who = FROM distance = 700 }
+				NOT = { capital_distance = { who = FROM distance = 800 } }
+			}
+			export_to_variable = { variable_name = ai_value value = -100 }
+		}
+		add_entry = {
+			name = bt_recipients_distance_to_new_overlords_capital
+			limit = {
+				capital_distance = { who = FROM distance = 800 }
+				NOT = { capital_distance = { who = FROM distance = 900 } }
+			}
+			export_to_variable = { variable_name = ai_value value = -120 }
+		}
+		add_entry = {
+			name = bt_recipients_distance_to_new_overlords_capital
+			limit = {
+				capital_distance = { who = FROM distance = 900 }
+				NOT = { capital_distance = { who = FROM distance = 1000 } }
+			}
+			export_to_variable = { variable_name = ai_value value = -140 }
+		}
+		add_entry = {
+			name = bt_recipients_distance_to_new_overlords_capital
+			limit = {
+				capital_distance = { who = FROM distance = 1000 }
+			}
+			export_to_variable = { variable_name = ai_value value = -200 }
+		}
+		
+	}
+}

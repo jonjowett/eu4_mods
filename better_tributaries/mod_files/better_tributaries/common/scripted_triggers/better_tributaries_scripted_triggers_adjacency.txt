@@ -1,0 +1,96 @@
+from_is_adjacent_to_root_or_roots_subjects = {
+	ROOT = {
+		OR = {
+			any_owned_province = {
+				is_neighbor_of = FROM
+			}
+			any_subject_country = {
+				any_owned_province = {
+					is_neighbor_of = FROM
+				}
+			}
+		}
+	}
+}
+
+from_is_separated_from_root_or_roots_subjects_by_one_province = {
+	from_is_adjacent_to_root_or_roots_subjects = no
+	ROOT = {
+		OR = {
+			any_owned_province = {
+				any_neighbor_province = {
+					is_neighbor_of = FROM
+				}
+			}
+			any_subject_country = {
+				any_owned_province = {
+					any_neighbor_province = {
+						is_neighbor_of = FROM
+					}
+				}
+			}
+		}
+	}
+}
+
+from_is_separated_from_root_or_roots_subjects_by_two_provinces = {
+	from_is_adjacent_to_root_or_roots_subjects = no
+	from_is_separated_from_root_or_roots_subjects_by_one_province = no
+	ROOT = {
+		OR = {
+			any_owned_province = {
+				any_neighbor_province = {
+					any_neighbor_province = {
+						is_neighbor_of = FROM
+					}
+				}
+			}
+			any_subject_country = {
+				any_owned_province = {
+					any_neighbor_province = {
+						any_neighbor_province = {
+							is_neighbor_of = FROM
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+from_is_separated_from_root_or_roots_subjects_by_three_provinces = {
+	from_is_adjacent_to_root_or_roots_subjects = no
+	from_is_separated_from_root_or_roots_subjects_by_one_province = no
+	from_is_separated_from_root_or_roots_subjects_by_two_provinces = no
+	ROOT = {
+		OR = {
+			any_owned_province = {
+				any_neighbor_province = {
+					any_neighbor_province = {
+						any_neighbor_province = {
+							is_neighbor_of = FROM
+						}
+					}
+				}
+			}
+			any_subject_country = {
+				any_owned_province = {
+					any_neighbor_province = {
+						any_neighbor_province = {
+							any_neighbor_province = {
+								is_neighbor_of = FROM
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+from_is_separated_from_root_or_roots_subjects_by_more_than_three_provinces = {
+	from_is_adjacent_to_root_or_roots_subjects = no
+	from_is_separated_from_root_or_roots_subjects_by_one_province = no
+	from_is_separated_from_root_or_roots_subjects_by_two_provinces = no
+	from_is_separated_from_root_or_roots_subjects_by_three_provinces = no
+}

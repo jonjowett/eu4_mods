@@ -1,0 +1,303 @@
+#froms_distance_to_roots_nearest_state_0_50 = {
+#	ROOT = {
+#		any_owned_province = {
+#			is_state = yes
+#			FROM = {
+#				any_owned_province = {
+#					is_state = yes
+#					NOT = {
+#						province_distance = {
+#							who = PREVPREV
+#							distance = 50
+#						}
+#					}
+#				}
+#			}
+#		}
+#	}
+#}
+#
+#froms_distance_to_roots_nearest_state_50_100 = {
+#	froms_distance_to_roots_nearest_state_0_50    = no
+#	ROOT = {
+#		any_owned_province = {
+#			is_state = yes
+#			FROM = {
+#				any_owned_province = {
+#					is_state = yes
+#					province_distance = {
+#						who = PREVPREV
+#						distance = 50
+#					}
+#					NOT = {
+#						province_distance = {
+#							who = PREVPREV
+#							distance = 100
+#						}
+#					}
+#				}
+#			}
+#		}
+#	}
+#}
+#
+#froms_distance_to_roots_nearest_state_100_200 = {
+#	froms_distance_to_roots_nearest_state_0_50    = no
+#	froms_distance_to_roots_nearest_state_50_100  = no
+#	ROOT = {
+#		any_owned_province = {
+#			is_state = yes
+#			FROM = {
+#				any_owned_province = {
+#					is_state = yes
+#					province_distance = {
+#						who = PREVPREV
+#						distance = 100
+#					}
+#					NOT = {
+#						province_distance = {
+#							who = PREVPREV
+#							distance = 200
+#						}
+#					}
+#				}
+#			}
+#		}
+#	}
+#}
+#
+#froms_distance_to_roots_nearest_state_200_300 = {
+#	froms_distance_to_roots_nearest_state_0_50    = no
+#	froms_distance_to_roots_nearest_state_50_100  = no
+#	froms_distance_to_roots_nearest_state_100_200 = no
+#	ROOT = {
+#		any_owned_province = {
+#			is_state = yes
+#			FROM = {
+#				any_owned_province = {
+#					is_state = yes
+#					province_distance = {
+#						who = PREVPREV
+#						distance = 200
+#					}
+#					NOT = {
+#						province_distance = {
+#							who = PREVPREV
+#							distance = 300
+#						}
+#					}
+#				}
+#			}
+#		}
+#	}
+#}
+#
+#froms_distance_to_roots_nearest_state_300_400 = {
+#	froms_distance_to_roots_nearest_state_0_50    = no
+#	froms_distance_to_roots_nearest_state_50_100  = no
+#	froms_distance_to_roots_nearest_state_100_200 = no
+#	froms_distance_to_roots_nearest_state_200_300 = no
+#	ROOT = {
+#		any_owned_province = {
+#			is_state = yes
+#			FROM = {
+#				any_owned_province = {
+#					is_state = yes
+#					province_distance = {
+#						who = PREVPREV
+#						distance = 300
+#					}
+#					NOT = {
+#						province_distance = {
+#							who = PREVPREV
+#							distance = 400
+#						}
+#					}
+#				}
+#			}
+#		}
+#	}
+#}
+#
+#froms_distance_to_roots_nearest_state_400_500 = {
+#	froms_distance_to_roots_nearest_state_0_50    = no
+#	froms_distance_to_roots_nearest_state_50_100  = no
+#	froms_distance_to_roots_nearest_state_100_200 = no
+#	froms_distance_to_roots_nearest_state_200_300 = no
+#	froms_distance_to_roots_nearest_state_300_400 = no
+#	ROOT = {
+#		any_owned_province = {
+#			is_state = yes
+#			FROM = {
+#				any_owned_province = {
+#					is_state = yes
+#					province_distance = {
+#						who = PREVPREV
+#						distance = 400
+#					}
+#					NOT = {
+#						province_distance = {
+#							who = PREVPREV
+#							distance = 500
+#						}
+#					}
+#				}
+#			}
+#		}
+#	}
+#}
+#
+#froms_distance_to_roots_nearest_state_500_600 = {
+#	froms_distance_to_roots_nearest_state_0_50    = no
+#	froms_distance_to_roots_nearest_state_50_100  = no
+#	froms_distance_to_roots_nearest_state_100_200 = no
+#	froms_distance_to_roots_nearest_state_200_300 = no
+#	froms_distance_to_roots_nearest_state_300_400 = no
+#	froms_distance_to_roots_nearest_state_400_500 = no
+#	ROOT = {
+#		any_owned_province = {
+#			is_state = yes
+#			FROM = {
+#				any_owned_province = {
+#					is_state = yes
+#					province_distance = {
+#						who = PREVPREV
+#						distance = 500
+#					}
+#					NOT = {
+#						province_distance = {
+#							who = PREVPREV
+#							distance = 600
+#						}
+#					}
+#				}
+#			}
+#		}
+#	}
+#}
+#
+#froms_distance_to_roots_nearest_state_600_700 = {
+#	froms_distance_to_roots_nearest_state_0_50    = no
+#	froms_distance_to_roots_nearest_state_50_100  = no
+#	froms_distance_to_roots_nearest_state_100_200 = no
+#	froms_distance_to_roots_nearest_state_200_300 = no
+#	froms_distance_to_roots_nearest_state_300_400 = no
+#	froms_distance_to_roots_nearest_state_400_500 = no
+#	froms_distance_to_roots_nearest_state_500_600 = no
+#	ROOT = {
+#		any_owned_province = {
+#			is_state = yes
+#			FROM = {
+#				any_owned_province = {
+#					is_state = yes
+#					province_distance = {
+#						who = PREVPREV
+#						distance = 600
+#					}
+#					NOT = {
+#						province_distance = {
+#							who = PREVPREV
+#							distance = 700
+#						}
+#					}
+#				}
+#			}
+#		}
+#	}
+#}
+#
+#froms_distance_to_roots_nearest_state_700_800 = {
+#	froms_distance_to_roots_nearest_state_0_50    = no
+#	froms_distance_to_roots_nearest_state_50_100  = no
+#	froms_distance_to_roots_nearest_state_100_200 = no
+#	froms_distance_to_roots_nearest_state_200_300 = no
+#	froms_distance_to_roots_nearest_state_300_400 = no
+#	froms_distance_to_roots_nearest_state_400_500 = no
+#	froms_distance_to_roots_nearest_state_500_600 = no
+#	froms_distance_to_roots_nearest_state_600_700 = no
+#	ROOT = {
+#		any_owned_province = {
+#			is_state = yes
+#			FROM = {
+#				any_owned_province = {
+#					is_state = yes
+#					province_distance = {
+#						who = PREVPREV
+#						distance = 700
+#					}
+#					NOT = {
+#						province_distance = {
+#							who = PREVPREV
+#							distance = 800
+#						}
+#					}
+#				}
+#			}
+#		}
+#	}
+#}
+#
+#froms_distance_to_roots_nearest_state_800_900 = {
+#	froms_distance_to_roots_nearest_state_0_50    = no
+#	froms_distance_to_roots_nearest_state_50_100  = no
+#	froms_distance_to_roots_nearest_state_100_200 = no
+#	froms_distance_to_roots_nearest_state_200_300 = no
+#	froms_distance_to_roots_nearest_state_300_400 = no
+#	froms_distance_to_roots_nearest_state_400_500 = no
+#	froms_distance_to_roots_nearest_state_500_600 = no
+#	froms_distance_to_roots_nearest_state_600_700 = no
+#	froms_distance_to_roots_nearest_state_700_800 = no
+#	ROOT = {
+#		any_owned_province = {
+#			is_state = yes
+#			FROM = {
+#				any_owned_province = {
+#					is_state = yes
+#					province_distance = {
+#						who = PREVPREV
+#						distance = 800
+#					}
+#					NOT = {
+#						province_distance = {
+#							who = PREVPREV
+#							distance = 900
+#						}
+#					}
+#				}
+#			}
+#		}
+#	}
+#}
+#
+#froms_distance_to_roots_nearest_state_900_1000 = {
+#	froms_distance_to_roots_nearest_state_0_50    = no
+#	froms_distance_to_roots_nearest_state_50_100  = no
+#	froms_distance_to_roots_nearest_state_100_200 = no
+#	froms_distance_to_roots_nearest_state_200_300 = no
+#	froms_distance_to_roots_nearest_state_300_400 = no
+#	froms_distance_to_roots_nearest_state_400_500 = no
+#	froms_distance_to_roots_nearest_state_500_600 = no
+#	froms_distance_to_roots_nearest_state_600_700 = no
+#	froms_distance_to_roots_nearest_state_700_800 = no
+#	froms_distance_to_roots_nearest_state_800_900 = no
+#	ROOT = {
+#		any_owned_province = {
+#			is_state = yes
+#			FROM = {
+#				any_owned_province = {
+#					is_state = yes
+#					province_distance = {
+#						who = PREVPREV
+#						distance = 900
+#					}
+#					NOT = {
+#						province_distance = {
+#							who = PREVPREV
+#							distance = 1000
+#						}
+#					}
+#				}
+#			}
+#		}
+#	}
+#}
