@@ -25,9 +25,11 @@ xorme_ai_can_build_fort_trigger = {
 			
 			# Bugfix: Allow subjects of players to build forts (so the players can build the forts on their behalf)
 			#  --- NB: This requires an offsetting fix that zeroises the ai_will_do value for AI that have 4+ loans
-			AND = {
-				is_subject = yes
-				overlord = { ai = no }
+			FROM = {
+				AND = {
+					is_subject = yes
+					overlord = { ai = no }
+				}
 			}
 			
 		}
