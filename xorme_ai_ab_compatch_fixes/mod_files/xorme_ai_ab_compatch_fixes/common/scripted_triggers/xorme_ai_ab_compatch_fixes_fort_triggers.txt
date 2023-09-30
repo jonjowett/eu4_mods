@@ -8,11 +8,12 @@ xorme_ai_can_build_fort_trigger = {
 			all_neighbor_province = {
 				OR = {
 					NOT = { owned_by = FROM } # Bugfix: Provinces in neighbouring nations don't count, so AI can build border forts on both sides of the border
-					NOT = {
-						OR = {
-							xorme_ai_is_building_fort_trigger = yes
-							xorme_ai_has_any_fort_trigger = yes
-							has_influencing_fort = yes
+					custom_trigger_tooltip = {
+						tooltip = XAI_AB_COMPATCH_BUGFIXES_PROVINCE_COMBINED_FORT_REQUIREMENTS
+						AND = {
+							xorme_ai_has_any_fort_trigger = no
+							xorme_ai_is_building_fort_trigger = no
+							has_influencing_fort = no
 						}
 					}
 				}
@@ -26,9 +27,12 @@ xorme_ai_can_build_fort_trigger = {
 			# Bugfix: Allow subjects of players to build forts (so the players can build the forts on their behalf)
 			#  --- NB: This requires an offsetting fix that zeroises the ai_will_do value for AI that have 4+ loans
 			FROM = {
-				AND = {
-					is_subject = yes
-					overlord = { ai = no }
+				custom_trigger_tooltip = {
+					tooltip = XAI_AB_COMPATCH_BUGFIXES_THIS_NATION_IS_A_PLAYER_SUBJECT
+					AND = {
+						is_subject = yes
+						overlord = { ai = no }
+					}
 				}
 			}
 			
