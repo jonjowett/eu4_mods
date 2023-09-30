@@ -1,0 +1,36 @@
+xorme_ai_can_build_fort_trigger = {
+	if = {
+		limit = { FROM = { ai = yes } }
+		
+		# Location: Capital, or doesn't have a nearby OWNED fort
+		OR = {
+			is_capital_of = FROM
+			all_neighbor_province = {
+				OR = {
+					NOT = { owned_by = FROM } # Bugfix: Provinces in neighbouring nations don't count, so AI can build border forts on both sides of the border
+					NOT = {
+						OR = {
+							xorme_ai_is_building_fort_trigger = yes
+							xorme_ai_has_any_fort_trigger = yes
+							has_influencing_fort = yes
+						}
+					}
+				}
+			}	
+		}
+		
+		# Economy: Few loans, or player subject
+		OR = {
+			FROM = { NOT = { num_of_loans = 4 } }
+			
+			# Bugfix: Allow subjects of players to build forts (so the players can build the forts on their behalf)
+			#  --- NB: This requires an offsetting fix that zeroises the ai_will_do value for AI that have 4+ loans
+			AND = {
+				is_subject = yes
+				overlord = { ai = no }
+			}
+			
+		}
+		
+	}
+}

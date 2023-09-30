@@ -1,0 +1,140 @@
+on_province_owner_change = {
+	events = {
+		japan.1
+	}
+	on_province_owner_change_government_effect = yes
+
+	if = {
+		limit = {
+			OR = {
+				has_province_modifier = expand_infrastructure_1
+				has_province_modifier = expand_infrastructure_2
+				has_province_modifier = expand_infrastructure_3
+			}
+		}
+		remove_province_modifier = expand_infrastructure_1
+		remove_province_modifier = expand_infrastructure_2
+		remove_province_modifier = expand_infrastructure_3
+	}
+	if = {
+		limit = {
+			owned_by = SRU
+			exists = ARA
+		}
+		ARA = {
+			set_country_flag = ARA_defeat_saruhan
+		}
+	}
+	if = {
+		limit = {
+			NOT = { owner = { religion_group = muslim } }
+			has_province_modifier = sufi_shrine
+		}
+		remove_province_modifier = sufi_shrine
+	}
+	on_province_owner_change_estate_privileges_effect = yes
+	judaism_on_province_change_religion_or_change_owner_effect = yes
+	imperial_modifiers_on_province_change_culture_or_change_owner_effect = yes
+	
+	if = {
+		limit = {
+			region = indo_china_region
+			has_building = farm_estate
+			trade_goods = grain
+			owner = {
+				has_mission = mnd_khm_irrigation 
+				NOT = {
+					OR = {
+						has_estate = estate_vaisyas
+						has_estate = estate_burghers
+					}
+				}
+			}
+		}
+		add_province_modifier = {
+			name = grain_production_improved
+			duration = 7300
+		}
+	}
+
+	if = {
+		limit = {
+			trade_goods = gold
+			NOT = { has_province_modifier = estate_burghers_control_over_gold_mine }
+			owner = {
+				has_estate_privilege = estate_burghers_control_over_the_mint
+			}
+		}
+		add_province_modifier = {
+			name = estate_burghers_control_over_gold_mine
+			duration = -1
+		}
+	}
+	
+	if = {
+		limit = {
+			province_id = 379
+			owner = {
+				NOT = { religion = jewish }
+			}
+		}
+		remove_country_modifier = third_temple_country_modifier
+	}
+	if = {
+		limit = {
+			owner = {
+				has_country_modifier = son_fetishism_as_secondary_religion
+			}
+			religion = shamanism
+			NOT = { has_province_modifier = son_fetishism_as_secondary_religion_province }
+		}
+		add_province_modifier = {
+			name = son_fetishism_as_secondary_religion_province
+			duration = -1
+			desc = son_fetishism_as_secondary_religion_province_desc
+		}
+	}
+	else_if = {
+		limit = {
+			OR = {
+				owner = {
+					NOT = { has_country_modifier = son_fetishism_as_secondary_religion }
+				}
+				NOT = { religion = shamanism }
+			}
+			has_province_modifier = son_fetishism_as_secondary_religion_province
+		}
+		remove_province_modifier = son_fetishism_as_secondary_religion_province
+	}
+	# AB
+	# If the province with the high king is captured then move it
+	# to their new capital inside ireland, or exile him.
+	if = {
+		limit = {
+			FROM = {
+				has_country_modifier = ire_high_king_opp
+			}
+		}
+		FROM = { save_event_target_as = hk_ire }
+		owner = {
+			if = {
+				limit = {
+					is_subject = yes
+				}
+				overlord = {
+					country_event = { id = hk_ire.16 } # Foreign power exiles HK
+					country_event = { id = hk_ire.18 } # Irish minor exiles HK
+				}
+			}
+			else = {
+				country_event = { id = hk_ire.16 } # Foreign power exiles HK
+				country_event = { id = hk_ire.18 } # Irish minor exiles HK
+			}
+		}
+	}
+	ab_on_province_owner_change_update_modifiers_effect = yes
+	# This will fire only once
+	owner = {
+		country_event = { id = ab_rome.1 }
+	}
+}
