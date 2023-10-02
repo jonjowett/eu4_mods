@@ -9,7 +9,7 @@
 # manufactory = { trade_good trade_good } # list of trade goods that get a production bonus
 # onmap = yes/no # show as a sprite on the map
 
-# FROM = FROM
+# FROM = owner
 # ROOT = province
 
 # Building AI is now mainly hard-coded. The AI will estimate how much it gains yearly from each building,
@@ -4131,7 +4131,7 @@ state_house = {
 		}
 		NOT = {
 			area_for_scope_province = {
-				FROM = {
+				owner = { # Bugfix: This should be owner not FROM, as per vanilla
 					tag = ROOT
 				}
 				OR = {
@@ -4150,7 +4150,7 @@ state_house = {
 		NOT = {
 			area_for_scope_province = {
 				NOT = { province_id = root }
-				FROM = {
+				owner = {
 					tag = ROOT
 				}
 				OR = {
