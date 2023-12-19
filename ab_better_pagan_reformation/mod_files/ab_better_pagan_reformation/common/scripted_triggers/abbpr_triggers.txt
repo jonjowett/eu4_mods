@@ -1,0 +1,221 @@
+abbpr_this_province_follows_unreformed_version_of_prevs_religion = {
+	OR = {
+		AND = {
+			religion = hellenic
+			PREV = {
+				OR = {
+					religion = hellenic
+					religion = reformed_hellenic
+				}
+			}
+		}
+		AND = {
+			religion = norse_pagan_reformed
+			PREV = {
+				OR = {
+					religion = norse_pagan_reformed
+					religion = reformed_norse
+				}
+			}
+		}
+		AND = {
+			religion = baltic_pagan
+			PREV = {
+				OR = {
+					religion = baltic_pagan
+					religion = reformed_baltic
+				}
+			}
+		}
+		AND = {
+			religion = suomi_pagan
+			PREV = {
+				OR = {
+					religion = suomi_pagan
+					religion = reformed_suomi
+				}
+			}
+		}
+		AND = {
+			religion = slavic_pagan
+			PREV = {
+				OR = {
+					religion = slavic_pagan
+					religion = reformed_slavic
+				}
+			}
+		}
+	}
+}
+
+abbpr_this_province_is_owned_by_root_or_roots_same_religion_subject = {
+	custom_trigger_tooltip = {
+		tooltip = abbpr_province_is_owned_by_root_or_roots_same_religion_subject_tt
+		OR = {
+			owned_by = ROOT
+			owner = {
+				religion = ROOT
+				is_subject_of = ROOT
+				NOT = { is_subject_of_type = tributary_state }
+			}
+		}
+	}
+}
+
+abbpr_this_province_has_its_owners_great_temple = {
+	OR = {
+		# NB: There is no Romuva great temple
+		AND = {
+			owner = {
+				OR = {
+					religion = reformed_hellenic
+					religion = hellenic
+				}
+			}
+			has_great_project = {
+				type = apollo
+			}
+		}
+		AND = {
+			owner = {
+				OR = {
+					religion = norse_pagan_reformed
+					religion = reformed_norse
+				}
+			}
+			has_great_project = {
+				type = mead
+			}
+		}
+		AND = {
+			owner = {
+				OR = {
+					religion = suomi_pagan
+					religion = reformed_suomi
+				}
+			}
+			has_great_project = {
+				type = shrine_ukko
+			}
+		}
+		AND = {
+			owner = {
+				OR = {
+					religion = slavic_pagan
+					religion = reformed_slavic
+				}
+			}
+			has_great_project = {
+				type = temple_of_arkona
+			}
+		}
+	}
+}
+
+abbpr_this_nation_has_great_temple_at_tier_2 = {
+	OR = {
+		# NB: There is no Romuva great temple
+		AND = {
+			OR = {
+				religion = reformed_hellenic
+				religion = hellenic
+			}
+			any_owned_province = {
+				has_great_project = {
+					type = apollo
+					tier = 2
+				}
+			}
+		}
+		AND = {
+			OR = {
+				religion = norse_pagan_reformed
+				religion = reformed_norse
+			}
+			any_owned_province = {
+				has_great_project = {
+					type = mead
+					tier = 2
+				}
+			}
+		}
+		AND = {
+			OR = {
+				religion = suomi_pagan
+				religion = reformed_suomi
+			}
+			any_owned_province = {
+				has_great_project = {
+					type = shrine_ukko
+					tier = 2
+				}
+			}
+		}
+		AND = {
+			OR = {
+				religion = slavic_pagan
+				religion = reformed_slavic
+			}
+			any_owned_province = {
+				has_great_project = {
+					type = temple_of_arkona
+					tier = 2
+				}
+			}
+		}
+	}
+}
+
+abbpr_this_nation_has_great_temple_at_tier_3 = {
+	OR = {
+		# NB: There is no Romuva great temple
+		AND = {
+			OR = {
+				religion = reformed_hellenic
+				religion = hellenic
+			}
+			any_owned_province = {
+				has_great_project = {
+					type = apollo
+					tier = 3
+				}
+			}
+		}
+		AND = {
+			OR = {
+				religion = norse_pagan_reformed
+				religion = reformed_norse
+			}
+			any_owned_province = {
+				has_great_project = {
+					type = mead
+					tier = 3
+				}
+			}
+		}
+		AND = {
+			OR = {
+				religion = suomi_pagan
+				religion = reformed_suomi
+			}
+			any_owned_province = {
+				has_great_project = {
+					type = shrine_ukko
+					tier = 3
+				}
+			}
+		}
+		AND = {
+			OR = {
+				religion = slavic_pagan
+				religion = reformed_slavic
+			}
+			any_owned_province = {
+				has_great_project = {
+					type = temple_of_arkona
+					tier = 3
+				}
+			}
+		}
+	}
+}

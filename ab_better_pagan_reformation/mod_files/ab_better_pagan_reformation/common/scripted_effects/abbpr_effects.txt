@@ -1,0 +1,316 @@
+abbpr_randomly_flip_this_nations_owned_unreformed_pagan_provinces_to_reformed_pagan = {
+	custom_tooltip = abbpr_every_unreformed_province_might_convert_to_reformed
+	hidden_effect = {
+		
+		# Calculate the fraction of unreformed provinces which are in a TC
+		set_variable = {
+			which = num_of_owned_unreformed_tc_provinces
+			value = 0
+		}
+		set_variable = {
+			which = num_of_owned_unreformed_provinces
+			value = 0
+		}
+		every_owned_province = {
+			limit = { abbpr_this_province_follows_unreformed_version_of_prevs_religion = yes }
+			change_variable = {
+				which = num_of_owned_unreformed_provinces
+				value = 1
+			}
+			if = {
+				limit = { is_owned_by_trade_company = yes }
+				change_variable = {
+					which = num_of_owned_unreformed_tc_provinces
+					value = 1
+				}
+			}
+		}
+		set_variable = {
+			which = frac_of_owned_unreformed_provinces_which_are_tc
+			which = num_of_owned_unreformed_tc_provinces
+		}
+		divide_variable = {
+			which = frac_of_owned_unreformed_provinces_which_are_tc
+			which = num_of_owned_unreformed_provinces
+		}
+		
+		# Check & potentially flip every province
+		every_owned_province = {
+			limit = {
+				abbpr_this_province_follows_unreformed_version_of_prevs_religion = yes
+			}
+			random_list = {
+				33 = {
+					# Change the religion to reformed pagan
+					
+					# Primary/accepted culture increases the chance (closer to primary => higher chance)
+					# Unaccepted culture decreases the chance
+					modifier = {
+						factor = 3
+						culture = PREV
+					}
+					modifier = {
+						factor = 2.5
+						accepted_culture = PREV
+						culture_group = PREV
+						NOT = { culture = PREV }
+					}
+					modifier = {
+						factor = 2
+						accepted_culture = PREV
+						NOR = {
+							culture = PREV
+							culture_group = PREV
+						}
+					}
+					modifier = {
+						factor = 1.5
+						culture_group = PREV
+						NOR = {
+							culture = PREV
+							accepted_culture = PREV
+						}
+					}
+					modifier = {
+						factor = 0.5
+						NOR = {
+							culture = PREV
+							accepted_culture = PREV
+							culture_group = PREV
+						}
+					}
+					
+					# Religious infrastructure increases the chance (local infra > global infra)
+					modifier = {
+						factor = 2
+						has_building = temple
+						NOT = { has_building = cathedral }
+					}
+					modifier = {
+						factor = 4
+						has_building = cathedral
+					}
+					modifier = {
+						factor = 1.5
+						PREV = { abbpr_this_nation_has_great_temple_at_tier_2 = yes }
+						PREV = { abbpr_this_nation_has_great_temple_at_tier_3 = no  }
+					}
+					modifier = {
+						factor = 2
+						PREV = { abbpr_this_nation_has_great_temple_at_tier_3 = yes }
+					}
+					
+					# Relevant estate privileges modify the chance of random conversion
+					# NB: It's technically possible to have Brahmins as a pagan (Indian tech & capital in India)
+					modifier = {
+						factor = 1.5
+						PREV = { has_estate_privilege = estate_church_enforced_one_faith }
+					}
+					modifier = {
+						factor = 1.5
+						OR = {
+							PREV = { has_estate_privilege = estate_church_one_faith_one_culture }
+							PREV = { has_estate_privilege = estate_brahmins_one_faith_one_culture }
+						}
+						OR = {
+							culture = PREV
+							accepted_culture = PREV
+							culture_group = PREV
+						}
+					}
+					modifier = {
+						factor = 0.5
+						OR = {
+							PREV = { has_estate_privilege = estate_church_one_faith_one_culture }
+							PREV = { has_estate_privilege = estate_brahmins_one_faith_one_culture }
+						}
+						NOR = {
+							culture = PREV
+							accepted_culture = PREV
+							culture_group = PREV
+						}
+					}
+					modifier = {
+						factor = 0.5
+						PREV = { has_estate_privilege = estate_burghers_enforced_interfaith_dialogue }
+					}
+					modifier = {
+						factor = 0.5
+						PREV = { has_estate_privilege = estate_brahmins_legitimacy_to_rule }
+					}
+					
+					# Be nice to the player: increased chance if the province was recently converted
+					modifier = {
+						factor = 2
+						has_province_modifier = religious_zeal_at_conv
+					}
+					
+					trigger_switch = {
+						on_trigger = religion
+						hellenic             = { change_religion = reformed_hellenic }
+						norse_pagan_reformed = { change_religion = reformed_norse    }
+						baltic_pagan         = { change_religion = reformed_baltic   }
+						suomi_pagan          = { change_religion = reformed_suomi    }
+						slavic_pagan         = { change_religion = reformed_slavic   }
+					}
+					
+				}
+				67 = {
+					# Religion does not change
+					
+					# Be nice to the player: TCs always convert
+					# NB: This is offset by an increased chance of non-conversion in non-TC provinces (see below)
+					modifier = {
+						factor = 0
+						is_owned_by_trade_company = yes
+					}
+					
+					# Great temple province always converts
+					modifier = {
+						factor = 0
+						abbpr_this_province_has_its_owners_great_temple = yes
+					}
+					
+					# Increase the chance of non-conversion if a large number of provinces have been autoconverted due to being in a TC
+					# Factor = (1 + (frac * 6))
+					modifier = {
+						factor = 1.3
+						is_owned_by_trade_company = no
+						check_variable = {
+							which = frac_of_owned_unreformed_provinces_which_are_tc
+							value = 0.05
+						}
+						NOT = {
+							check_variable = {
+								which = frac_of_owned_unreformed_provinces_which_are_tc
+								value = 0.1
+							}
+						}
+					}
+					modifier = {
+						factor = 1.6
+						is_owned_by_trade_company = no
+						check_variable = {
+							which = frac_of_owned_unreformed_provinces_which_are_tc
+							value = 0.1
+						}
+						NOT = {
+							check_variable = {
+								which = frac_of_owned_unreformed_provinces_which_are_tc
+								value = 0.15
+							}
+						}
+					}
+					modifier = {
+						factor = 1.9
+						is_owned_by_trade_company = no
+						check_variable = {
+							which = frac_of_owned_unreformed_provinces_which_are_tc
+							value = 0.15
+						}
+						NOT = {
+							check_variable = {
+								which = frac_of_owned_unreformed_provinces_which_are_tc
+								value = 0.2
+							}
+						}
+					}
+					modifier = {
+						factor = 2.2
+						is_owned_by_trade_company = no
+						check_variable = {
+							which = frac_of_owned_unreformed_provinces_which_are_tc
+							value = 0.2
+						}
+						NOT = {
+							check_variable = {
+								which = frac_of_owned_unreformed_provinces_which_are_tc
+								value = 0.25
+							}
+						}
+					}
+					modifier = {
+						factor = 2.5
+						is_owned_by_trade_company = no
+						check_variable = {
+							which = frac_of_owned_unreformed_provinces_which_are_tc
+							value = 0.25
+						}
+						NOT = {
+							check_variable = {
+								which = frac_of_owned_unreformed_provinces_which_are_tc
+								value = 0.375
+							}
+						}
+					}
+					modifier = {
+						factor = 3.25
+						is_owned_by_trade_company = no
+						check_variable = {
+							which = frac_of_owned_unreformed_provinces_which_are_tc
+							value = 0.375
+						}
+						NOT = {
+							check_variable = {
+								which = frac_of_owned_unreformed_provinces_which_are_tc
+								value = 0.5
+							}
+						}
+					}
+					modifier = {
+						factor = 4
+						is_owned_by_trade_company = no
+						check_variable = {
+							which = frac_of_owned_unreformed_provinces_which_are_tc
+							value = 0.5
+						}
+						NOT = {
+							check_variable = {
+								which = frac_of_owned_unreformed_provinces_which_are_tc
+								value = 0.625
+							}
+						}
+					}
+					modifier = {
+						factor = 4.75
+						is_owned_by_trade_company = no
+						check_variable = {
+							which = frac_of_owned_unreformed_provinces_which_are_tc
+							value = 0.625
+						}
+						NOT = {
+							check_variable = {
+								which = frac_of_owned_unreformed_provinces_which_are_tc
+								value = 0.75
+							}
+						}
+					}
+					modifier = {
+						factor = 5.5
+						is_owned_by_trade_company = no
+						check_variable = {
+							which = frac_of_owned_unreformed_provinces_which_are_tc
+							value = 0.75
+						}
+					}
+					
+				}
+			}
+		}
+		
+		# Clean up the variables
+		set_variable = {
+			which = num_of_owned_unreformed_provinces
+			value = 0
+		}
+		set_variable = {
+			which = num_of_owned_unreformed_tc_provinces
+			value = 0
+		}
+		set_variable = {
+			which = frac_of_owned_unreformed_provinces_which_are_tc
+			value = 0
+		}
+		
+	}
+}

@@ -1,0 +1,73 @@
+country_decisions = {
+
+	reform_hellenic_religion = {
+		major = yes
+		potential = {
+			religion = hellenic
+		}
+		provinces_to_highlight = {
+			OR = {
+				province_id = 146
+				province_id = 148
+				province_id = 151
+				province_id = 317
+				province_id = 2313
+				province_id = 358
+				province_id = 2982
+				province_id = 320
+				province_id = 5152
+			}
+		}
+		allow = {
+			full_idea_group = religious_ideas
+			any_owned_province = {
+				has_great_project = {
+					type = apollo
+					tier = 1
+				}
+			}
+			146  = { abbpr_this_province_is_owned_by_root_or_roots_same_religion_subject = yes }
+			148  = { abbpr_this_province_is_owned_by_root_or_roots_same_religion_subject = yes }
+			151  = { abbpr_this_province_is_owned_by_root_or_roots_same_religion_subject = yes }
+			317  = { abbpr_this_province_is_owned_by_root_or_roots_same_religion_subject = yes }
+			2313 = { abbpr_this_province_is_owned_by_root_or_roots_same_religion_subject = yes }
+			358  = { abbpr_this_province_is_owned_by_root_or_roots_same_religion_subject = yes }
+			2982 = { abbpr_this_province_is_owned_by_root_or_roots_same_religion_subject = yes }
+			320  = { abbpr_this_province_is_owned_by_root_or_roots_same_religion_subject = yes }
+			5152 = { abbpr_this_province_is_owned_by_root_or_roots_same_religion_subject = yes }
+		}
+		effect = {
+			add_stability = -2
+			change_religion = reformed_hellenic
+			capital_scope = {
+				change_religion = reformed_hellenic
+			}
+			abbpr_randomly_flip_this_nations_owned_unreformed_pagan_provinces_to_reformed_pagan = yes
+			add_country_modifier = {
+				name = "wee_conversion_zeal"
+				duration = 3650
+			}	
+			custom_tooltip = abbpr_every_unreformed_subject_also_flips_to_reformed
+			hidden_effect = {
+				every_subject_country = {
+					limit = {
+						religion = hellenic
+						NOT = { is_subject_of_type = tributary_state }
+					}
+					change_religion = reformed_hellenic
+					capital_scope = {
+						change_religion = reformed_hellenic
+					}
+					abbpr_randomly_flip_this_nations_owned_unreformed_pagan_provinces_to_reformed_pagan = yes
+					add_country_modifier = {
+						name = wee_conversion_zeal
+						duration = 3650
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+}

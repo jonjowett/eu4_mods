@@ -1,0 +1,71 @@
+country_decisions = {
+
+	reform_suomi_religion = {
+		major = yes
+		potential = {
+			religion = suomi_pagan
+		}
+		provinces_to_highlight = {
+			OR = {
+				province_id = 35
+				province_id = 36
+				province_id = 33
+				province_id = 28
+				province_id = 5001
+				province_id = 1777
+				province_id = 315
+				province_id = 18
+			}
+		}
+		allow = {
+			full_idea_group = religious_ideas
+			calc_true_if = {
+				all_owned_province = {
+					religion = suomi_pagan
+				}
+				amount = 30
+			}
+			35   = { abbpr_this_province_is_owned_by_root_or_roots_same_religion_subject = yes }
+			36   = { abbpr_this_province_is_owned_by_root_or_roots_same_religion_subject = yes }
+			33   = { abbpr_this_province_is_owned_by_root_or_roots_same_religion_subject = yes }
+			28   = { abbpr_this_province_is_owned_by_root_or_roots_same_religion_subject = yes }
+			5001 = { abbpr_this_province_is_owned_by_root_or_roots_same_religion_subject = yes }
+			1777 = { abbpr_this_province_is_owned_by_root_or_roots_same_religion_subject = yes }
+			315  = { abbpr_this_province_is_owned_by_root_or_roots_same_religion_subject = yes }
+			18   = { abbpr_this_province_is_owned_by_root_or_roots_same_religion_subject = yes }
+		}
+		effect = {
+			add_stability = -2
+			change_religion = reformed_suomi
+			capital_scope = {
+				change_religion = reformed_suomi
+			}
+			abbpr_randomly_flip_this_nations_owned_unreformed_pagan_provinces_to_reformed_pagan = yes
+			add_country_modifier = {
+				name = "wee_conversion_zeal"
+				duration = 3650
+			}	
+			custom_tooltip = abbpr_every_unreformed_subject_also_flips_to_reformed
+			hidden_effect = {
+				every_subject_country = {
+					limit = {
+						religion = suomi_pagan
+						NOT = { is_subject_of_type = tributary_state }
+					}
+					change_religion = reformed_suomi
+					capital_scope = {
+						change_religion = reformed_suomi
+					}
+					abbpr_randomly_flip_this_nations_owned_unreformed_pagan_provinces_to_reformed_pagan = yes
+					add_country_modifier = {
+						name = wee_conversion_zeal
+						duration = 3650
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+}

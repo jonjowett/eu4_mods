@@ -1,0 +1,4 @@
+﻿l_english:
+ abbpr_every_unreformed_province_might_convert_to_reformed:0 "\nEvery §Y[Root.Religion.GetName]§! province has a chance of switching to §YReformed [Root.Religion.GetName]§!.\n§g(Trade Company provinces will always switch, for convenience. However, every province that automatically switches reduces the likelihood that other provinces will randomly switch.)§!\n"
+ abbpr_province_is_owned_by_root_or_roots_same_religion_subject_tt:0 "Is owned by §Y[Root.GetName]§! or its same-religion non-tributary subject"
+ abbpr_every_unreformed_subject_also_flips_to_reformed:0 "Every §Y[Root.Religion.GetName]§! subject will convert to §YReformed [Root.Religion.GetName]§!, and their §Y[Root.Religion.GetName]§! provinces also have a chance of switching to §YReformed [Root.Religion.GetName]§!"

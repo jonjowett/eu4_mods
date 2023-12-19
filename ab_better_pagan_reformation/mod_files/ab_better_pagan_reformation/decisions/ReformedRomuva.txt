@@ -1,0 +1,67 @@
+country_decisions = {
+
+	reform_baltic_religion = {
+		major = yes
+		potential = {
+			religion = baltic_pagan
+		}
+		provinces_to_highlight = {
+			OR = {
+				province_id = 43
+				province_id = 41
+				province_id = 272
+				province_id = 4970
+				province_id = 38
+				province_id = 37
+			}
+		}
+		allow = {
+			full_idea_group = religious_ideas
+			calc_true_if = {
+				all_owned_province = {
+					religion = baltic_pagan
+				}
+				amount = 30
+			}
+			43   = { abbpr_this_province_is_owned_by_root_or_roots_same_religion_subject = yes }
+			41   = { abbpr_this_province_is_owned_by_root_or_roots_same_religion_subject = yes }
+			272  = { abbpr_this_province_is_owned_by_root_or_roots_same_religion_subject = yes }
+			4970 = { abbpr_this_province_is_owned_by_root_or_roots_same_religion_subject = yes }
+			38   = { abbpr_this_province_is_owned_by_root_or_roots_same_religion_subject = yes }
+			37   = { abbpr_this_province_is_owned_by_root_or_roots_same_religion_subject = yes }
+		}
+		effect = {
+			add_stability = -2
+			change_religion = reformed_baltic
+			capital_scope = {
+				change_religion = reformed_baltic
+			}
+			abbpr_randomly_flip_this_nations_owned_unreformed_pagan_provinces_to_reformed_pagan = yes
+			add_country_modifier = {
+				name = "wee_conversion_zeal"
+				duration = 3650
+			}	
+			custom_tooltip = abbpr_every_unreformed_subject_also_flips_to_reformed
+			hidden_effect = {
+				every_subject_country = {
+					limit = {
+						religion = baltic_pagan
+						NOT = { is_subject_of_type = tributary_state }
+					}
+					change_religion = reformed_baltic
+					capital_scope = {
+						change_religion = reformed_baltic
+					}
+					abbpr_randomly_flip_this_nations_owned_unreformed_pagan_provinces_to_reformed_pagan = yes
+					add_country_modifier = {
+						name = wee_conversion_zeal
+						duration = 3650
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+}
