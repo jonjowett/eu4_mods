@@ -18,14 +18,32 @@ from_is_separated_from_root_or_roots_subjects_by_one_province = {
 	ROOT = {
 		OR = {
 			any_owned_province = {
-				any_neighbor_province = {
-					is_neighbor_of = FROM
-				}
+				this_province_is_separated_from_from_by_one_land_or_sea_province = yes
 			}
 			any_subject_country = {
 				any_owned_province = {
+					this_province_is_separated_from_from_by_one_land_or_sea_province = yes
+				}
+			}
+		}
+	}
+}
+
+this_province_is_separated_from_from_by_one_land_or_sea_province = {
+	OR = {
+		any_neighbor_province = {
+			is_neighbor_of = FROM
+		}
+		AND = {
+			has_port = yes
+			OR = {
+				# Easy check which should always work: Adjacent by sea and positive relations
+				any_friendly_coast_border_province = {
+					owned_by = FROM
+				}
+				sea_zone = {
 					any_neighbor_province = {
-						is_neighbor_of = FROM
+						owned_by = FROM
 					}
 				}
 			}
@@ -39,18 +57,33 @@ from_is_separated_from_root_or_roots_subjects_by_two_provinces = {
 	ROOT = {
 		OR = {
 			any_owned_province = {
-				any_neighbor_province = {
-					any_neighbor_province = {
-						is_neighbor_of = FROM
-					}
-				}
+				this_province_is_separated_from_from_by_two_land_or_sea_provinces = yes
 			}
 			any_subject_country = {
 				any_owned_province = {
+					this_province_is_separated_from_from_by_two_land_or_sea_provinces = yes
+				}
+			}
+		}
+	}
+}
+
+this_province_is_separated_from_from_by_two_land_or_sea_provinces = {
+	OR = {
+		any_neighbor_province = {
+			any_neighbor_province = {
+				is_neighbor_of = FROM
+			}
+		}
+		AND = {
+			has_port = yes
+			sea_zone = {
+				any_neighbor_province = {
+					is_sea = yes
 					any_neighbor_province = {
-						any_neighbor_province = {
-							is_neighbor_of = FROM
-						}
+						is_sea = no
+						has_port = yes
+						owned_by = FROM
 					}
 				}
 			}
@@ -80,6 +113,34 @@ from_is_separated_from_root_or_roots_subjects_by_three_provinces = {
 							any_neighbor_province = {
 								is_neighbor_of = FROM
 							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+this_province_is_separated_from_from_by_three_land_or_sea_provinces = {
+	OR = {
+		any_neighbor_province = {
+			any_neighbor_province = {
+				any_neighbor_province = {
+					is_neighbor_of = FROM
+				}
+			}
+		}
+		AND = {
+			has_port = yes
+			sea_zone = {
+				any_neighbor_province = {
+					is_sea = yes
+					any_neighbor_province = {
+						is_sea = yes
+						any_neighbor_province = {
+							is_sea = no
+							has_port = yes
+							owned_by = FROM
 						}
 					}
 				}
