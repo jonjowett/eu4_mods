@@ -1,0 +1,29 @@
+[h1]Summary:[/h1]
+
+This mod allows all Hindu nations to unlock the Buddha deity, if they either form Bharat or own [u]both[/u] of the EU4 Buddhist holy sites (Lhasa in Tibet and Kandy in Sri Lanka).
+
+The reason for this is that, in vanilla EU4, Hindu nations can only select the Buddha deity by starting as one of three specific nations and completing certain missions which are locked to those nations. To me, this is a shame both for role-play and gameplay reasons(*), so I made a way for any vast Hindu empire to also unlock the Buddha deity.
+
+(*) Eg - Role-play: Hinduism and Buddhism have a long history of mutual tolerance and influence in India, especially during the period prior to EU4, so it makes sense to me that an EU4 Hindu nation could establish or re-establish this relationship. Eg - Gameplay: Activating Buddhist monuments provides several benefits which are otherwise in short supply for Hindu nations (eg. missionaries).
+
+[h1]Compatibility/Impact:[/h1]
+For almost all of my mods, including this one, my aim is to be as compatible as possible with vanilla EU4 (and other mods), and to avoid making the game easier.
+[list]
+[*]Compatible EU4 versions: 1.33.* to 1.36.* (and maybe future versions too, as long as Paradox don't change the deities file)
+[*]Achievement compatible: No
+[*]Safe to add to existing game: Yes
+[*]Safe to remove from existing game: Yes
+[*]Changes to vanilla files: Overwrites ...\common\personal_deities\00_hindu_deities.txt
+[*]Mod compatibility: Should be compatible with any other mod that doesn't also overwrite the Hindu deities
+[*]Changes to AI behaviour: Minor (the AI doesn't often form Bharat or conquer all of India)
+[*]Decrease in game difficulty: Minor (the ability to use Buddhist monuments is nice but not gamebreaking)
+[*]Localisation: English only
+[*]Mod development status: Complete
+[/list]
+
+[h1]Other Versions / Alternate Download / Reuse:[/h1]
+[list]
+[*]All of my EU4 mods are version-controlled via a [url=https://github.com/jonjowett/eu4_mods]Github repository[/url] (eg. if you want earlier/beta versions of any of my mods). 
+[*]I also publish a [url=https://github.com/jonjowett/eu4_mods/blob/main/hindu_buddha_deity_improved/packaged_mod/hindu_buddha_deity_improved.zip]zip version[/url] of this mod on Github.
+[*]All of my mods are published on Github under the MIT license, and I'm following the same logic here on the workshop. Essentially, you're welcome to reuse my mods in any way you wish as long as you provide attribution (eg. credit and/or a link).
+[/list]
