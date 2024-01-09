@@ -1,12 +1,15 @@
 from_is_adjacent_to_root_or_roots_subjects = {
-	ROOT = {
-		OR = {
-			any_owned_province = {
-				is_neighbor_of = FROM
-			}
-			any_subject_country = {
+	custom_trigger_tooltip = {
+		tooltip = from_is_adjacent_to_root_or_roots_subjects_tt
+		ROOT = {
+			OR = {
 				any_owned_province = {
 					is_neighbor_of = FROM
+				}
+				any_subject_country = {
+					any_owned_province = {
+						is_neighbor_of = FROM
+					}
 				}
 			}
 		}
@@ -14,15 +17,20 @@ from_is_adjacent_to_root_or_roots_subjects = {
 }
 
 from_is_separated_from_root_or_roots_subjects_by_one_province = {
-	from_is_adjacent_to_root_or_roots_subjects = no
-	ROOT = {
-		OR = {
-			any_owned_province = {
-				this_province_is_separated_from_from_by_one_land_or_sea_province = yes
-			}
-			any_subject_country = {
-				any_owned_province = {
-					this_province_is_separated_from_from_by_one_land_or_sea_province = yes
+	custom_trigger_tooltip = {
+		tooltip = from_is_separated_from_root_or_roots_subjects_by_one_province_tt
+		AND = {
+			from_is_adjacent_to_root_or_roots_subjects = no
+			ROOT = {
+				OR = {
+					any_owned_province = {
+						this_province_is_separated_from_from_by_one_land_or_sea_province = yes
+					}
+					any_subject_country = {
+						any_owned_province = {
+							this_province_is_separated_from_from_by_one_land_or_sea_province = yes
+						}
+					}
 				}
 			}
 		}
@@ -52,16 +60,21 @@ this_province_is_separated_from_from_by_one_land_or_sea_province = {
 }
 
 from_is_separated_from_root_or_roots_subjects_by_two_provinces = {
-	from_is_adjacent_to_root_or_roots_subjects = no
-	from_is_separated_from_root_or_roots_subjects_by_one_province = no
-	ROOT = {
-		OR = {
-			any_owned_province = {
-				this_province_is_separated_from_from_by_two_land_or_sea_provinces = yes
-			}
-			any_subject_country = {
-				any_owned_province = {
-					this_province_is_separated_from_from_by_two_land_or_sea_provinces = yes
+	custom_trigger_tooltip = {
+		tooltip = from_is_separated_from_root_or_roots_subjects_by_two_provinces_tt
+		AND = {
+			from_is_adjacent_to_root_or_roots_subjects = no
+			from_is_separated_from_root_or_roots_subjects_by_one_province = no
+			ROOT = {
+				OR = {
+					any_owned_province = {
+						this_province_is_separated_from_from_by_two_land_or_sea_provinces = yes
+					}
+					any_subject_country = {
+						any_owned_province = {
+							this_province_is_separated_from_from_by_two_land_or_sea_provinces = yes
+						}
+					}
 				}
 			}
 		}
@@ -77,13 +90,20 @@ this_province_is_separated_from_from_by_two_land_or_sea_provinces = {
 		}
 		AND = {
 			has_port = yes
-			sea_zone = {
-				any_neighbor_province = {
-					is_sea = yes
-					any_neighbor_province = {
-						is_sea = no
-						has_port = yes
+			OR = {
+				any_friendly_coast_border_province = {
+					any_friendly_coast_border_province = {
 						owned_by = FROM
+					}
+				}
+				sea_zone = {
+					any_neighbor_province = {
+						is_sea = yes
+						any_neighbor_province = {
+							is_sea = no
+							has_port = yes
+							owned_by = FROM
+						}
 					}
 				}
 			}
@@ -92,26 +112,31 @@ this_province_is_separated_from_from_by_two_land_or_sea_provinces = {
 }
 
 from_is_separated_from_root_or_roots_subjects_by_three_provinces = {
-	from_is_adjacent_to_root_or_roots_subjects = no
-	from_is_separated_from_root_or_roots_subjects_by_one_province = no
-	from_is_separated_from_root_or_roots_subjects_by_two_provinces = no
-	ROOT = {
-		OR = {
-			any_owned_province = {
-				any_neighbor_province = {
-					any_neighbor_province = {
-						any_neighbor_province = {
-							is_neighbor_of = FROM
-						}
-					}
-				}
-			}
-			any_subject_country = {
-				any_owned_province = {
-					any_neighbor_province = {
+	custom_trigger_tooltip = {
+		tooltip = from_is_separated_from_root_or_roots_subjects_by_three_provinces_tt
+		AND = {
+			from_is_adjacent_to_root_or_roots_subjects = no
+			from_is_separated_from_root_or_roots_subjects_by_one_province = no
+			from_is_separated_from_root_or_roots_subjects_by_two_provinces = no
+			ROOT = {
+				OR = {
+					any_owned_province = {
 						any_neighbor_province = {
 							any_neighbor_province = {
-								is_neighbor_of = FROM
+								any_neighbor_province = {
+									is_neighbor_of = FROM
+								}
+							}
+						}
+					}
+					any_subject_country = {
+						any_owned_province = {
+							any_neighbor_province = {
+								any_neighbor_province = {
+									any_neighbor_province = {
+										is_neighbor_of = FROM
+									}
+								}
 							}
 						}
 					}
@@ -132,15 +157,24 @@ this_province_is_separated_from_from_by_three_land_or_sea_provinces = {
 		}
 		AND = {
 			has_port = yes
-			sea_zone = {
-				any_neighbor_province = {
-					is_sea = yes
+			OR = {
+				any_friendly_coast_border_province = {
+					any_friendly_coast_border_province = {
+						any_friendly_coast_border_province = {
+							owned_by = FROM
+						}
+					}
+				}
+				sea_zone = {
 					any_neighbor_province = {
 						is_sea = yes
 						any_neighbor_province = {
-							is_sea = no
-							has_port = yes
-							owned_by = FROM
+							is_sea = yes
+							any_neighbor_province = {
+								is_sea = no
+								has_port = yes
+								owned_by = FROM
+							}
 						}
 					}
 				}
@@ -150,8 +184,20 @@ this_province_is_separated_from_from_by_three_land_or_sea_provinces = {
 }
 
 from_is_separated_from_root_or_roots_subjects_by_more_than_three_provinces = {
-	from_is_adjacent_to_root_or_roots_subjects = no
-	from_is_separated_from_root_or_roots_subjects_by_one_province = no
-	from_is_separated_from_root_or_roots_subjects_by_two_provinces = no
-	from_is_separated_from_root_or_roots_subjects_by_three_provinces = no
+	custom_trigger_tooltip = {
+		tooltip = from_is_separated_from_root_or_roots_subjects_by_more_than_three_provinces_tt
+		from_is_separated_from_root_or_roots_subjects_by_at_most_three_provinces = no
+	}
+}
+
+from_is_separated_from_root_or_roots_subjects_by_at_most_three_provinces = {
+	custom_trigger_tooltip = {
+		tooltip = from_is_separated_from_root_or_roots_subjects_by_at_most_three_provinces_tt
+		OR = {
+			from_is_adjacent_to_root_or_roots_subjects = yes
+			from_is_separated_from_root_or_roots_subjects_by_one_province = yes
+			from_is_separated_from_root_or_roots_subjects_by_two_provinces = yes
+			from_is_separated_from_root_or_roots_subjects_by_three_provinces = yes
+		}
+	}
 }

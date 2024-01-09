@@ -1,9 +1,16 @@
 establish_tributary_better = {
 	category = influence
-
+	
+	
+	
 	require_acceptance = yes
-
+	
+	
+	
 	is_visible = {
+		
+		# DLC requirement
+		has_dlc = "Mandate of Heaven"
 		
 		# Vanilla requirements to create tributaries, from the wiki
 		ROOT = { is_subject = no }
@@ -17,7 +24,7 @@ establish_tributary_better = {
 			has_estate_privilege = estate_nobles_grant_power_to_the_bashorun
 		}
 		
-		# Mod added - can ask tributaries of other nations to become your tributary instead
+		# Mod added - recipient must not be a non-tributary subject, and must not already be a tributary of proposer
 		OR = {
 			FROM = { is_subject = no }
 			AND = {
@@ -27,9 +34,30 @@ establish_tributary_better = {
 		}
 		
 	}
+	
+	
+	
 	is_allowed = {
-		always = yes
+		
+		# Disable the decision for vanilla blocks & -1000 reasons on the recipient
+		# Mod alteration: Do NOT disable the decision if proposer is at war.
+		# Mod alteration: Do NOT disable the decision due to attitude, so the proposer can get a CB.
+		FROM = { is_at_war = no }
+		FROM = { NOT = { is_elector = yes } } # is_elector = no has a bad tooltip
+		FROM = { is_emperor = no }
+		FROM = { is_emperor_of_china = no }
+		FROM = { NOT = { num_of_subjects = 1 } }
+		
+		# Mod-added blocks & -1000 reasons
+		from_is_separated_from_root_or_roots_subjects_by_at_most_three_provinces = yes
+		
+		# Mod-added so that prestige loss from recipient declining can't be negated
+		ROOT = { prestige = 0 }
+		
 	}
+	
+	
+	
 	on_accept = {
 		if = {
 			limit = { FROM = { is_subject = yes } }
@@ -47,16 +75,69 @@ establish_tributary_better = {
 			subject = FROM
 		}
 	}
+	
+	
+	
 	on_decline = {
+		add_prestige = -10
+		add_casus_belli = {
+			target = FROM
+			type = cb_force_tributary_mission
+			months = 12
+		}
 	}
-
+	
 	ai_will_do = { # this is a trigger
-		always = no	# Disable for AI for now
+		always = no # Disable for AI for now
 	}
-
+	
+	
+	
 	ai_acceptance = {
 		
-		# Replicate vanilla decision-making logic
+		
+		
+		###########################################
+		# Replicate vanilla decision-making logic #
+		###########################################
+		
+		# Recipient is at war
+		# Entry not needed - decision is disabled
+#		add_entry = {
+#			name = bt_recipient_is_at_war
+#			limit = { FROM = { is_at_war = yes } }
+#			export_to_variable = {
+#				variable_name = ai_value
+#				value = -1000
+#			}
+#		}
+		
+		# Elector / HREmperor / EoC
+		# Entry not needed - decision is disabled
+#		add_entry = {
+#			name = bt_recipient_is_elector
+#			limit = { FROM = { is_elector = yes } }
+#			export_to_variable = {
+#				variable_name = ai_value
+#				value = -1000
+#			}
+#		}
+#		add_entry = {
+#			name = bt_recipient_is_hre_emperor
+#			limit = { FROM = { is_emperor = yes } }
+#			export_to_variable = {
+#				variable_name = ai_value
+#				value = -1000
+#			}
+#		}
+#		add_entry = {
+#			name = bt_recipient_is_emperor_of_china
+#			limit = { FROM = { is_emperor_of_china = yes } }
+#			export_to_variable = {
+#				variable_name = ai_value
+#				value = -1000
+#			}
+#		}
 		
 		# Attitude
 		add_entry = {
@@ -83,6 +164,16 @@ establish_tributary_better = {
 			export_to_variable = {
 				variable_name = ai_value
 				value = 100
+			}
+		}
+		add_entry = {
+			name = bt_recipient_neutral_attitude_towards_overlord
+			limit = {
+				FROM = { ai_attitude = { who = ROOT attitude = attitude_neutral } }
+			}
+			export_to_variable = {
+				variable_name = ai_value
+				value = -50
 			}
 		}
 		
@@ -153,20 +244,36 @@ establish_tributary_better = {
 		}
 		
 		# AI nation has subject of its own: -1000
-		add_entry = {
-			name = bt_recipient_has_own_subjects
-			limit = { FROM = { any_subject_country = { always = yes } } }
-			export_to_variable = {
-				variable_name = ai_value
-				value = -1000
-			}
-		}
+		# Entry not needed - decision is disabled
+#		add_entry = {
+#			name = bt_recipient_has_own_subjects
+#			limit = { FROM = { num_of_subjects = 1 } }
+#			export_to_variable = {
+#				variable_name = ai_value
+#				value = -1000
+#			}
+#		}
 		
 		# Economic & military comparisons are complex - see below
 		
 		# Vanilla neighbour condition removed and reworked - see below
 		
-		# Vanilla distance between borders removed - use the new adjacency condition instead
+		# Distance between borders: -0.5 per distance
+		# This is actually "distance to nearest border of a non-tributary subject of the proposer",
+		#    so it's still useful as a measure of "will the new overlord be able to defend me?".
+		add_entry = {
+			name = bt_distance_between_borders
+			export_to_variable = {
+				variable_name = ai_value
+				value = border_distance
+				who = ROOT
+				with = FROM
+			}
+			multiply_variable = {
+				which = ai_value
+				value = -0.5
+			}
+		}
 		
 		# Proposer is Celestial Empire or has horde government with rank Empire: +10
 		add_entry = {
@@ -1076,106 +1183,123 @@ establish_tributary_better = {
 			limit = { from_is_separated_from_root_or_roots_subjects_by_three_provinces = yes }
 			export_to_variable = { variable_name = ai_value value = -100 }
 		}
-		add_entry = {
-			name = bt_recipient_adjacency_to_new_overlord_more_than_three_provinces
-			limit = { from_is_separated_from_root_or_roots_subjects_by_more_than_three_provinces = yes }
-			export_to_variable = { variable_name = ai_value value = -1000 }
-		}
+		# Entry not needed - decision is disabled
+#		add_entry = {
+#			name = bt_recipient_adjacency_to_new_overlord_more_than_three_provinces
+#			limit = { from_is_separated_from_root_or_roots_subjects_by_more_than_three_provinces = yes }
+#			export_to_variable = { variable_name = ai_value value = -1000 }
+#		}
 		
 		
 		
-		###########################################
-		# New condition: Distance between borders #
-		###########################################
-		
-		# If a tributary is too far away, the overlord won't be able to protect it properly.
-		
-		add_entry = {
-			name = bt_recipients_distance_to_new_overlords_capital
-			limit = {
-				NOT = { capital_distance = { who = FROM distance = 100 } }
-			}
-			export_to_variable = { variable_name = ai_value value = 0 }
-		}
-		add_entry = {
-			name = bt_recipients_distance_to_new_overlords_capital
-			limit = {
-				capital_distance = { who = FROM distance = 100 }
-				NOT = { capital_distance = { who = FROM distance = 200 } }
-			}
-			export_to_variable = { variable_name = ai_value value = -10 }
-		}
-		add_entry = {
-			name = bt_recipients_distance_to_new_overlords_capital
-			limit = {
-				capital_distance = { who = FROM distance = 200 }
-				NOT = { capital_distance = { who = FROM distance = 300 } }
-			}
-			export_to_variable = { variable_name = ai_value value = -20 }
-		}
-		add_entry = {
-			name = bt_recipients_distance_to_new_overlords_capital
-			limit = {
-				capital_distance = { who = FROM distance = 300 }
-				NOT = { capital_distance = { who = FROM distance = 400 } }
-			}
-			export_to_variable = { variable_name = ai_value value = -30 }
-		}
-		add_entry = {
-			name = bt_recipients_distance_to_new_overlords_capital
-			limit = {
-				capital_distance = { who = FROM distance = 400 }
-				NOT = { capital_distance = { who = FROM distance = 500 } }
-			}
-			export_to_variable = { variable_name = ai_value value = -40 }
-		}
-		add_entry = {
-			name = bt_recipients_distance_to_new_overlords_capital
-			limit = {
-				capital_distance = { who = FROM distance = 500 }
-				NOT = { capital_distance = { who = FROM distance = 600 } }
-			}
-			export_to_variable = { variable_name = ai_value value = -60 }
-		}
-		add_entry = {
-			name = bt_recipients_distance_to_new_overlords_capital
-			limit = {
-				capital_distance = { who = FROM distance = 600 }
-				NOT = { capital_distance = { who = FROM distance = 700 } }
-			}
-			export_to_variable = { variable_name = ai_value value = -80 }
-		}
-		add_entry = {
-			name = bt_recipients_distance_to_new_overlords_capital
-			limit = {
-				capital_distance = { who = FROM distance = 700 }
-				NOT = { capital_distance = { who = FROM distance = 800 } }
-			}
-			export_to_variable = { variable_name = ai_value value = -100 }
-		}
-		add_entry = {
-			name = bt_recipients_distance_to_new_overlords_capital
-			limit = {
-				capital_distance = { who = FROM distance = 800 }
-				NOT = { capital_distance = { who = FROM distance = 900 } }
-			}
-			export_to_variable = { variable_name = ai_value value = -120 }
-		}
-		add_entry = {
-			name = bt_recipients_distance_to_new_overlords_capital
-			limit = {
-				capital_distance = { who = FROM distance = 900 }
-				NOT = { capital_distance = { who = FROM distance = 1000 } }
-			}
-			export_to_variable = { variable_name = ai_value value = -140 }
-		}
-		add_entry = {
-			name = bt_recipients_distance_to_new_overlords_capital
-			limit = {
-				capital_distance = { who = FROM distance = 1000 }
-			}
-			export_to_variable = { variable_name = ai_value value = -200 }
-		}
+#		############################################
+#		# New condition: Distance between capitals #
+#		############################################
+#		
+#		# If a tributary is too far away, the overlord won't be able to protect it properly.
+#		
+#		add_entry = {
+#			name = bt_recipients_distance_to_new_overlords_capital
+#			limit = {
+#				NOT = { capital_distance = { who = FROM distance = 100 } }
+#			}
+#			export_to_variable = { variable_name = ai_value value = 0 }
+#		}
+#		add_entry = {
+#			name = bt_recipients_distance_to_new_overlords_capital
+#			limit = {
+#				capital_distance = { who = FROM distance = 100 }
+#				NOT = { capital_distance = { who = FROM distance = 200 } }
+#			}
+#			export_to_variable = { variable_name = ai_value value = -5 }
+#		}
+#		add_entry = {
+#			name = bt_recipients_distance_to_new_overlords_capital
+#			limit = {
+#				capital_distance = { who = FROM distance = 200 }
+#				NOT = { capital_distance = { who = FROM distance = 300 } }
+#			}
+#			export_to_variable = { variable_name = ai_value value = -10 }
+#		}
+#		add_entry = {
+#			name = bt_recipients_distance_to_new_overlords_capital
+#			limit = {
+#				capital_distance = { who = FROM distance = 300 }
+#				NOT = { capital_distance = { who = FROM distance = 400 } }
+#			}
+#			export_to_variable = { variable_name = ai_value value = -15 }
+#		}
+#		add_entry = {
+#			name = bt_recipients_distance_to_new_overlords_capital
+#			limit = {
+#				capital_distance = { who = FROM distance = 400 }
+#				NOT = { capital_distance = { who = FROM distance = 500 } }
+#			}
+#			export_to_variable = { variable_name = ai_value value = -20 }
+#		}
+#		add_entry = {
+#			name = bt_recipients_distance_to_new_overlords_capital
+#			limit = {
+#				capital_distance = { who = FROM distance = 500 }
+#				NOT = { capital_distance = { who = FROM distance = 600 } }
+#			}
+#			export_to_variable = { variable_name = ai_value value = -30 }
+#		}
+#		add_entry = {
+#			name = bt_recipients_distance_to_new_overlords_capital
+#			limit = {
+#				capital_distance = { who = FROM distance = 600 }
+#				NOT = { capital_distance = { who = FROM distance = 700 } }
+#			}
+#			export_to_variable = { variable_name = ai_value value = -40 }
+#		}
+#		add_entry = {
+#			name = bt_recipients_distance_to_new_overlords_capital
+#			limit = {
+#				capital_distance = { who = FROM distance = 700 }
+#				NOT = { capital_distance = { who = FROM distance = 800 } }
+#			}
+#			export_to_variable = { variable_name = ai_value value = -50 }
+#		}
+#		add_entry = {
+#			name = bt_recipients_distance_to_new_overlords_capital
+#			limit = {
+#				capital_distance = { who = FROM distance = 800 }
+#				NOT = { capital_distance = { who = FROM distance = 900 } }
+#			}
+#			export_to_variable = { variable_name = ai_value value = -60 }
+#		}
+#		add_entry = {
+#			name = bt_recipients_distance_to_new_overlords_capital
+#			limit = {
+#				capital_distance = { who = FROM distance = 900 }
+#				NOT = { capital_distance = { who = FROM distance = 1000 } }
+#			}
+#			export_to_variable = { variable_name = ai_value value = -70 }
+#		}
+#		add_entry = {
+#			name = bt_recipients_distance_to_new_overlords_capital
+#			limit = {
+#				capital_distance = { who = FROM distance = 1000 }
+#				NOT = { capital_distance = { who = FROM distance = 1100 } }
+#			}
+#			export_to_variable = { variable_name = ai_value value = -80 }
+#		}
+#		add_entry = {
+#			name = bt_recipients_distance_to_new_overlords_capital
+#			limit = {
+#				capital_distance = { who = FROM distance = 1100 }
+#				NOT = { capital_distance = { who = FROM distance = 1200 } }
+#			}
+#			export_to_variable = { variable_name = ai_value value = -90 }
+#		}
+#		add_entry = {
+#			name = bt_recipients_distance_to_new_overlords_capital
+#			limit = {
+#				capital_distance = { who = FROM distance = 1200 }
+#			}
+#			export_to_variable = { variable_name = ai_value value = -100 }
+#		}
 		
 	}
 }
